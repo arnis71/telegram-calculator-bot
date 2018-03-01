@@ -12,24 +12,23 @@ fun main(args: Array<String>) {
     app.use(parser.urlencoded(json("extended" to true)))
 
     app.post("/new-message") { req, res ->
-        res.send("ok")
-//        val message = req.body.message
-//
-//        if (!message.text.toString().contains("marco", true)) {
-//            return@get res.end()
-//        }
-//        axios.post("https://api.telegram.org/518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
-//            json(
-//                "chat_id" to message.chat.id,
-//                "text" to "Polo!!"
-//            )
-//        ).then { _ ->
-//            println("Message posted")
-//            res.end("ok")
-//        }.catch { err ->
-//            println("Error : $err")
-//            res.end("Error : $err")
-//        }
+        val message = req.body.message
+
+        if (!message.text.toString().contains("marco", true)) {
+            return@post res.end()
+        }
+        axios.post("https://api.telegram.org/518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
+            json(
+                "chat_id" to message.chat.id,
+                "text" to "Polo!!"
+            )
+        ).then { _ ->
+            println("Message posted")
+            res.end("ok")
+        }.catch { err ->
+            println("Error : $err")
+            res.end("Error : $err")
+        }
     }
 
     app.listen(3000) {
