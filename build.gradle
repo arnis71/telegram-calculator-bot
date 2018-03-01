@@ -27,3 +27,13 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/lib"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)

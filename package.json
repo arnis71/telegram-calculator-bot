@@ -4,7 +4,8 @@
   "description": "telegram calculator bot",
   "main": "node/index.js",
   "scripts": {
-    "test": "echo test"
+    "test": "echo test",
+    "start" : "node node/index.js"
   },
   "repository": {
     "type": "git",
