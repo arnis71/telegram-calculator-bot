@@ -9,7 +9,11 @@ fun main(args: Array<String>) {
     val app = express()
 
     app.use(parser.json())
-    app.use(parser.urlencoded())
+    app.use(parser.urlencoded(
+        json(
+            "extended" to true
+        )
+    ))
 
     app.get("/") { req, res ->
         res.send("Hello world")
