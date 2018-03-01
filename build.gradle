@@ -16,7 +16,7 @@ apply plugin: 'kotlin2js'
 
 compileKotlin2Js.kotlinOptions {
     moduleKind = "commonjs"
-    outputFile = "index.js"
+    outputFile = "node/index.js"
 }
 
 repositories {

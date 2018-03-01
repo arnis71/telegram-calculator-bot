@@ -2,7 +2,7 @@
   "name": "telegram_calculator_bot",
   "version": "1.0.0",
   "description": "telegram calculator bot",
-  "main": "index.js",
+  "main": "node/index.js",
   "scripts": {
     "test": "echo test"
   },
