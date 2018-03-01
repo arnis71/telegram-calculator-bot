@@ -12,6 +12,7 @@ fun main(args: Array<String>) {
     app.use(parser.urlencoded(json("extended" to true)))
 
     app.post("/new-message") { req, res ->
+        println("message received")
         val message = req.body.message
 
         if (!message.text.toString().contains("marco", true)) {
