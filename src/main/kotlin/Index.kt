@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     println("port $port")
 
     app.post("/new-message") { req, res ->
-        val message = req.body
+        val message = req.body.message
         println("message received $message")
 
         if (message == undefined || message.text?.toString()?.contains("marco", true) == true) {

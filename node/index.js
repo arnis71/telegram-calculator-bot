@@ -20,7 +20,7 @@
   function main$lambda(closure$axios) {
     return function (req, res) {
       var tmp$, tmp$_0, tmp$_1;
-      var message = req.body;
+      var message = req.body.message;
       println('message received ' + message);
       if (message == undefined || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === true) {
         return res.end();
