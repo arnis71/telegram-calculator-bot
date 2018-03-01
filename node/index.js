@@ -1,8 +1,8 @@
 (function (_, Kotlin) {
   'use strict';
-  var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var to = Kotlin.kotlin.to_ujzrz7$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
+  var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var Unit = Kotlin.kotlin.Unit;
   function main$lambda(req, res) {
@@ -39,7 +39,7 @@
     var axios = require('axios');
     var app = express();
     app.use(parser.json());
-    app.use(parser.urlencoded());
+    app.use(parser.urlencoded(json([to('extended', true)])));
     app.get('/', main$lambda);
     app.get('/new-message', main$lambda_0(axios));
     app.listen(3000, main$lambda_1);
