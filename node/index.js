@@ -2,8 +2,8 @@
   'use strict';
   var to = Kotlin.kotlin.to_ujzrz7$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
-  var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var Unit = Kotlin.kotlin.Unit;
   function main$lambda$lambda(closure$res) {
     return function (f) {
@@ -19,6 +19,7 @@
   }
   function main$lambda(closure$axios) {
     return function (req, res) {
+      println('message received');
       var message = req.body.message;
       if (!contains(message.text.toString(), 'marco', true)) {
         return res.end();
