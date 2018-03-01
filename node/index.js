@@ -32,14 +32,17 @@
     return Unit;
   }
   function main(args) {
+    var tmp$;
     var express = require('express');
     var parser = require('body-parser');
     var axios = require('axios');
     var app = express();
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
+    var port = (tmp$ = process.env.PORT) != null ? tmp$ : 3000;
+    println('port ' + port);
     app.post('/new-message', main$lambda(axios));
-    app.listen(3000, main$lambda_0);
+    app.listen(port, main$lambda_0);
   }
   _.main_kand9s$ = main;
   main([]);
