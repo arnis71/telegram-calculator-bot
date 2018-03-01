@@ -12,12 +12,13 @@ fun main(args: Array<String>) {
     app.use(parser.urlencoded(json("extended" to true)))
 
     app.post("/new-message") { req, res ->
-        println("message received")
-        val message = req.body.message
+        val message = req.body
+        println("message received ${message.text}")
 
         if (!message.text.toString().contains("marco", true)) {
             return@post res.end()
         }
+
         axios.post("https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
             json(
                 "chat_id" to message.chat.id,
