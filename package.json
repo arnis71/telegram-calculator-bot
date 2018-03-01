@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/arnis71/telegram-calculator-bot/issues"
   },
-  "homepage": "https://github.com/arnis71/telegram-calculator-bot#readme"
+  "homepage": "https://github.com/arnis71/telegram-calculator-bot#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "kotlin": "^1.2.21"
+  }
 }
