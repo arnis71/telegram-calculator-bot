@@ -18,7 +18,7 @@
     var app = express();
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
-    app.get('/new-message', main$lambda);
+    app.post('/new-message', main$lambda);
     app.listen(3000, main$lambda_0);
   }
   _.main_kand9s$ = main;

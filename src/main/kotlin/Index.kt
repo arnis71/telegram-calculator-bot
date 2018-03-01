@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
     app.use(parser.json())
     app.use(parser.urlencoded(json("extended" to true)))
 
-    app.get("/new-message") { req, res ->
+    app.post("/new-message") { req, res ->
         res.send("ok")
 //        val message = req.body.message
 //
