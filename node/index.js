@@ -19,17 +19,20 @@
   }
   function main$lambda(closure$axios) {
     return function (req, res) {
+      var tmp$, tmp$_0;
       var message = req.body;
       println('message received ' + message.text);
-      if (!contains(message.text.toString(), 'marco', true)) {
+      if (message == null || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === true) {
         return res.end();
       }
       return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', message.chat.id), to('text', 'Polo!!')])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
     };
   }
-  function main$lambda_0() {
-    println('Telegram app listening on port 3000!');
-    return Unit;
+  function main$lambda_0(closure$port) {
+    return function () {
+      println('Telegram app listening on port ' + closure$port + '!');
+      return Unit;
+    };
   }
   function main(args) {
     var tmp$;
@@ -42,7 +45,7 @@
     var port = (tmp$ = process.env.PORT) != null ? tmp$ : 3000;
     println('port ' + port);
     app.post('/new-message', main$lambda(axios));
-    app.listen(port, main$lambda_0);
+    app.listen(port, main$lambda_0(port));
   }
   _.main_kand9s$ = main;
   main([]);

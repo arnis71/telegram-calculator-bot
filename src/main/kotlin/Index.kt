@@ -19,10 +19,9 @@ fun main(args: Array<String>) {
         val message = req.body
         println("message received ${message.text}")
 
-        if (!message.text.toString().contains("marco", true)) {
+        if (message == null || message.text?.toString()?.contains("marco", true) == true) {
             return@post res.end()
         }
-
 
         axios.post("https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
             json(
@@ -39,6 +38,6 @@ fun main(args: Array<String>) {
     }
 
     app.listen(port) {
-        println("Telegram app listening on port 3000!")
+        println("Telegram app listening on port $port!")
     }
 }
