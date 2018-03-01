@@ -11,6 +11,10 @@ fun main(args: Array<String>) {
     app.use(parser.json())
     app.use(parser.urlencoded())
 
+    app.get("/") { req, res ->
+        res.send("Hello world")
+    }
+
     app.get("/new-message") { req, res ->
         val message = req.body.message
 
