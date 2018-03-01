@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
         if (!message.text.toString().contains("marco", true)) {
             return@post res.end()
         }
-        axios.post("https://api.telegram.org/518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
+        axios.post("https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
             json(
                 "chat_id" to message.chat.id,
                 "text" to "Polo!!"
