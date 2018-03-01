@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.post('/new-message', function(req, res) {
+  console.log('new message');
   const {message} = req.body
 
   if (!message || message.text.toLowerCase().indexOf('marco') <0) {
