@@ -19,14 +19,14 @@
   }
   function main$lambda(closure$axios) {
     return function (req, res) {
-      var tmp$, tmp$_0, tmp$_1;
+      var tmp$, tmp$_0;
       var message = req.body.message;
-      println('message received ' + message);
-      if (message == undefined || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === true) {
+      println('message received ' + message.text);
+      if (message == undefined || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === false) {
         return res.end();
       }
        else {
-        return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', (tmp$_1 = message.chat) != null ? tmp$_1.id : null), to('text', 'Polo!!')])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
+        return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', message.chat.id), to('text', 'Polo!!')])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
       }
     };
   }
@@ -45,7 +45,6 @@
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
     var port = (tmp$ = process.env.PORT) != null ? tmp$ : 3000;
-    println('port ' + port);
     app.post('/new-message', main$lambda(axios));
     app.listen(port, main$lambda_0(port));
   }

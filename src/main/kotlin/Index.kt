@@ -13,19 +13,17 @@ fun main(args: Array<String>) {
 
     val port = process.env.PORT ?: 3000
 
-    println("port $port")
-
     app.post("/new-message") { req, res ->
         val message = req.body.message
-        println("message received $message")
+        println("message received ${message.text}")
 
-        if (message == undefined || message.text?.toString()?.contains("marco", true) == true) {
+        if (message == undefined || message.text?.toString()?.contains("marco", true) == false) {
             return@post res.end()
         } else {
             axios.post(
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
                 json(
-                    "chat_id" to message.chat?.id,
+                    "chat_id" to message.chat.id,
                     "text" to "Polo!!"
                 )
             ).then { _ ->
