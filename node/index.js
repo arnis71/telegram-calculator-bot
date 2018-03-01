@@ -19,13 +19,15 @@
   }
   function main$lambda(closure$axios) {
     return function (req, res) {
-      var tmp$, tmp$_0;
+      var tmp$, tmp$_0, tmp$_1;
       var message = req.body;
-      println('message received ' + message.text);
-      if (message == null || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === true) {
+      println('message received ' + message);
+      if (message == undefined || ((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, 'marco', true) : null) === true) {
         return res.end();
       }
-      return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', message.chat.id), to('text', 'Polo!!')])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
+       else {
+        return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', (tmp$_1 = message.chat) != null ? tmp$_1.id : null), to('text', 'Polo!!')])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
+      }
     };
   }
   function main$lambda_0(closure$port) {
