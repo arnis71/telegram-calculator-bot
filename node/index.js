@@ -23,7 +23,7 @@
     return it === -1 ? '' : it.toString();
   }
   function CalculatorKeyboard$toJson$lambda_0(it) {
-    return json([to('text', it), to('callback_data', it)]);
+    return json([to('text', it), to('callback_data', 'data' + it)]);
   }
   CalculatorKeyboard.prototype.toJson = function () {
     return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf(['AC', '+', '-'])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
@@ -44,7 +44,7 @@
   }
   function main$lambda$lambda$lambda_0(closure$res) {
     return function (err) {
-      println('Error : ' + err + ', desc ' + err.desc);
+      println('Error : ' + err);
       return closure$res.end('Error : ' + err);
     };
   }
