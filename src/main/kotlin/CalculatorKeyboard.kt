@@ -1,6 +1,6 @@
 import kotlin.js.json
 
-class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
+class CalculatorKeyboard(private val rows: Int, private val cols: Int, private val resizeKeyboard: Boolean = true) {
     private val numbers = generateSequence(1) {
         it + 1
     }
@@ -18,6 +18,7 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
             .map { json("text" to it) }
             .chunked(cols)
             .toList()
-            .reversed()
+            .reversed(),
+        "resize_keyboard" to resizeKeyboard
     )
 }

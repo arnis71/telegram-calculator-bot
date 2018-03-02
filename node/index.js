@@ -14,9 +14,12 @@
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var Unit = Kotlin.kotlin.Unit;
-  function CalculatorKeyboard(rows, cols) {
+  function CalculatorKeyboard(rows, cols, resizeKeyboard) {
+    if (resizeKeyboard === void 0)
+      resizeKeyboard = true;
     this.rows_0 = rows;
     this.cols_0 = cols;
+    this.resizeKeyboard_0 = resizeKeyboard;
     this.numbers_0 = generateSequence(1, CalculatorKeyboard$numbers$lambda);
   }
   function CalculatorKeyboard$toJson$lambda(it) {
@@ -26,7 +29,7 @@
     return json([to('text', it)]);
   }
   CalculatorKeyboard.prototype.toJson = function () {
-    return json([to('keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf(['AC', '+', '-'])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
+    return json([to('keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf(['AC', '+', '-'])), CalculatorKeyboard$toJson$lambda_0), this.cols_0)))), to('resize_keyboard', this.resizeKeyboard_0)]);
   };
   function CalculatorKeyboard$numbers$lambda(it) {
     return it + 1 | 0;
