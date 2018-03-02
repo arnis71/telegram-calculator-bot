@@ -44,7 +44,7 @@
   }
   function main$lambda$lambda$lambda_0(closure$res) {
     return function (err) {
-      println('Error : ' + err);
+      println('Error : ' + err + ', desc ' + err.desc);
       return closure$res.end('Error : ' + err);
     };
   }

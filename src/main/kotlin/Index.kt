@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
                 println("Message posted")
                 res.end("ok")
             }.catch { err ->
-                    println("Error : $err")
+                    println("Error : $err, desc ${err.desc}")
                     res.end("Error : $err")
                 }
 
