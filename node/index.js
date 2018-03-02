@@ -55,7 +55,7 @@
       var tmp$_2;
       if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$axios_0 = closure$axios;
-        println('message received ' + tmp$_0.text);
+        println('message received text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
         closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda_0(res));
         '';
         tmp$_2 = tmp$_0;
@@ -97,11 +97,11 @@
     return $receiver.id !== -1 ? $receiver : null;
   }
   function CallbackQuery(data) {
-    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3, tmp$_4, tmp$_5, tmp$_6;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2;
     this.id = (tmp$_0 = typeof (tmp$ = data != null ? data.id : null) === 'string' ? tmp$ : null) != null ? tmp$_0 : '';
-    this.from = (tmp$_2 = Kotlin.isType(tmp$_1 = data != null ? data.from : null, User) ? tmp$_1 : null) != null ? tmp$_2 : new User(undefined);
-    this.message = (tmp$_4 = Kotlin.isType(tmp$_3 = data != null ? data.message : null, Message) ? tmp$_3 : null) != null ? tmp$_4 : new Message(undefined);
-    this.data = (tmp$_6 = typeof (tmp$_5 = data != null ? data.data : null) === 'string' ? tmp$_5 : null) != null ? tmp$_6 : '';
+    this.from = new User(data != null ? data.from : null);
+    this.message = new Message(data != null ? data.message : null);
+    this.data = (tmp$_2 = typeof (tmp$_1 = data != null ? data.data : null) === 'string' ? tmp$_1 : null) != null ? tmp$_2 : '';
   }
   CallbackQuery.$metadata$ = {
     kind: Kind_CLASS,
@@ -109,11 +109,11 @@
     interfaces: []
   };
   function Message(data) {
-    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3, tmp$_4, tmp$_5, tmp$_6;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2;
     this.id = (tmp$_0 = typeof (tmp$ = data != null ? data.message_id : null) === 'number' ? tmp$ : null) != null ? tmp$_0 : -1;
-    this.fromUser = (tmp$_2 = Kotlin.isType(tmp$_1 = data != null ? data.from : null, User) ? tmp$_1 : null) != null ? tmp$_2 : new User(undefined);
-    this.chat = (tmp$_4 = Kotlin.isType(tmp$_3 = data != null ? data.chat : null, Chat) ? tmp$_3 : null) != null ? tmp$_4 : new Chat(undefined);
-    this.text = (tmp$_6 = typeof (tmp$_5 = data != null ? data.text : null) === 'string' ? tmp$_5 : null) != null ? tmp$_6 : '';
+    this.fromUser = new User(data != null ? data.from : null);
+    this.chat = new Chat(data != null ? data.chat : null);
+    this.text = (tmp$_2 = typeof (tmp$_1 = data != null ? data.text : null) === 'string' ? tmp$_1 : null) != null ? tmp$_2 : '';
   }
   Message.$metadata$ = {
     kind: Kind_CLASS,
@@ -132,7 +132,7 @@
   };
   function Chat(data) {
     var tmp$, tmp$_0;
-    this.id = (tmp$_0 = typeof (tmp$ = data != null ? data.message_id : null) === 'number' ? tmp$ : null) != null ? tmp$_0 : -1;
+    this.id = (tmp$_0 = typeof (tmp$ = data != null ? data.id : null) === 'number' ? tmp$ : null) != null ? tmp$_0 : -1;
   }
   Chat.$metadata$ = {
     kind: Kind_CLASS,

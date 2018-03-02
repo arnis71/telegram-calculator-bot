@@ -6,15 +6,15 @@ fun asMessage(data: dynamic) = Message(data).takeIf { it.id != -1 }
 
 class CallbackQuery(data: dynamic) {
     val id: String = data?.id as? String ?: ""
-    val from: User = data?.from as? User ?: User(undefined)
-    val message: Message = data?.message as? Message ?: Message(undefined)
+    val from = User(data?.from)
+    val message = Message(data?.message)
     val data: String = data?.data as? String ?: ""
 }
 
 class Message(data: dynamic) {
     val id: Int = data?.message_id as? Int ?: -1
-    val fromUser: User = data?.from as? User ?: User(undefined)
-    val chat: Chat = data?.chat as? Chat ?: Chat(undefined)
+    val fromUser = User(data?.from)
+    val chat = Chat(data?.chat)
     val text: String = data?.text as? String ?: ""
 }
 
@@ -24,5 +24,5 @@ class User(data: dynamic) {
 }
 
 class Chat(data: dynamic) {
-    val id: Int = data?.message_id as? Int ?: -1
+    val id: Int = data?.id as? Int ?: -1
 }

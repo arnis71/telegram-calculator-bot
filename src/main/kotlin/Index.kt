@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
         val body = req.body
 
         asMessage(body.message)?.takeIf { it.text.contains("/start") }?.apply {
-            println("message received $text")
+            println("message received text: $text, chatId: ${chat.id}")
 
             axios.post(
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
