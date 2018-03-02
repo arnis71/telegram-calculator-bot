@@ -1,10 +1,41 @@
 (function (_, Kotlin) {
   'use strict';
+  var take = Kotlin.kotlin.sequences.take_wuwhe2$;
+  var getCallableRef = Kotlin.getCallableRef;
+  var map = Kotlin.kotlin.sequences.map_z5avom$;
+  var sequenceOf = Kotlin.kotlin.sequences.sequenceOf_i5x0yv$;
+  var plus = Kotlin.kotlin.sequences.plus_v0iwhp$;
   var to = Kotlin.kotlin.to_ujzrz7$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
+  var windowed = Kotlin.kotlin.sequences.windowed_1ll6yl$;
+  var toList = Kotlin.kotlin.sequences.toList_veqyi0$;
+  var reversed = Kotlin.kotlin.collections.reversed_7wnvza$;
+  var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
+  var Kind_CLASS = Kotlin.Kind.CLASS;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var Unit = Kotlin.kotlin.Unit;
+  function CalculatorKeyboard(rows, cols) {
+    this.rows_0 = rows;
+    this.cols_0 = cols;
+    this.numbers_0 = generateSequence(1, CalculatorKeyboard$numbers$lambda);
+  }
+  function CalculatorKeyboard$toJson$lambda(it) {
+    return json([to('text', it)]);
+  }
+  CalculatorKeyboard.prototype.toJson = function () {
+    return json([to('keyboard', reversed(toList(windowed(map(plus(map(take(this.numbers_0, Kotlin.imul(this.rows_0 - 1 | 0, this.cols_0)), getCallableRef('toString', function ($receiver) {
+      return $receiver.toString();
+    })), sequenceOf(['AC', '+', '-'])), CalculatorKeyboard$toJson$lambda), this.cols_0))))]);
+  };
+  function CalculatorKeyboard$numbers$lambda(it) {
+    return it + 1 | 0;
+  }
+  CalculatorKeyboard.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'CalculatorKeyboard',
+    interfaces: []
+  };
   function main$lambda$lambda(closure$res) {
     return function (f) {
       println('Message posted');
@@ -22,11 +53,8 @@
       var tmp$, tmp$_0;
       var message = req.body.message;
       println('message received ' + message.text);
-      if (message == undefined) {
-        return res.end();
-      }
-       else if (((tmp$_0 = (tmp$ = message.text) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, '/start') : null) === true) {
-        return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', message.chat.id), to('text', '0'), to('reply_markup', json([to('keyboard', [[json([to('text', '1')]), json([to('text', '2')])], [json([to('text', '3')]), json([to('text', '4')])]])]))])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
+      if (((tmp$_0 = (tmp$ = message != null ? message.text : null) != null ? tmp$.toString() : null) != null ? contains(tmp$_0, '/start') : null) === true) {
+        return closure$axios.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', message.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(3, 3)).toJson())])).then(main$lambda$lambda(res)).catch(main$lambda$lambda_0(res));
       }
        else
         return res.end();
@@ -50,6 +78,7 @@
     app.post('/new-message', main$lambda(axios));
     app.listen(port, main$lambda_0(port));
   }
+  _.CalculatorKeyboard = CalculatorKeyboard;
   _.main_kand9s$ = main;
   main([]);
   Kotlin.defineModule('index', _);

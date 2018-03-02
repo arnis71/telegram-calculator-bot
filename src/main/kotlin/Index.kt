@@ -17,20 +17,13 @@ fun main(args: Array<String>) {
         val message = req.body.message
         println("message received ${message.text}")
 
-        if (message == undefined) {
-            return@post res.end()
-        } else if (message.text?.toString()?.contains("/start") == true) {
+        if (message?.text?.toString()?.contains("/start") == true) {
             axios.post(
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
                 json(
                     "chat_id" to message.chat.id,
                     "text" to "0",
-                    "reply_markup" to json(
-                        "keyboard" to arrayOf(
-                            arrayOf(json("text" to "1"), json("text" to "2")),
-                            arrayOf(json("text" to "3"), json("text" to "4"))
-                        )
-                    )
+                    "reply_markup" to CalculatorKeyboard(3,3).toJson()
                 )
             ).then { _ ->
                 println("Message posted")
