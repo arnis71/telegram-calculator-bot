@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
                 json(
                     "chat_id" to message.chat.id,
                     "text" to "0",
-                    "reply_markup" to CalculatorKeyboard(3,3).toJson()
+                    "reply_markup" to CalculatorKeyboard(5,3).toJson()
                 )
             ).then { _ ->
                 println("Message posted")
