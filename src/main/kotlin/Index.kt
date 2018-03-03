@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         val body = req.body
 
         asMessage(body.message)?.takeIf { it.text.contains("/start") }?.apply {
-            println("message received text: $text, chatId: ${chat.id}")
+            println("message received from: ${fromUser.firstName}, text: $text, chatId: ${chat.id}")
 
             instanceController.incomingMessage(this)
 
@@ -33,9 +33,9 @@ fun main(args: Array<String>) {
             ).then { response ->
                 val data = response.data
                 val messageId = data.result.message_id as Int
-                val user = asUser(data.result.from)!!
-                instanceController.setMessageIdFor(user, messageId)
-                println("Message posted with id $messageId, from user ${user.firstName}")
+                instanceController.setMessageIdFor(fromUser, messageId)
+
+                println("Message posted with id $messageId, from user ${fromUser.firstName}")
                 res.end("ok")
             }.catch { err ->
                     println("Error : $err")

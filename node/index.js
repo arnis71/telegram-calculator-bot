@@ -14,9 +14,8 @@
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
-  var ensureNotNull = Kotlin.ensureNotNull;
   var Unit = Kotlin.kotlin.Unit;
-  var equals = Kotlin.equals;
+  var ensureNotNull = Kotlin.ensureNotNull;
   function CalculatorKeyboard(rows, cols) {
     this.rows_0 = rows;
     this.cols_0 = cols;
@@ -39,14 +38,13 @@
     simpleName: 'CalculatorKeyboard',
     interfaces: []
   };
-  function main$lambda$lambda$lambda(closure$instanceController, closure$res) {
+  function main$lambda$lambda$lambda(closure$instanceController, this$, closure$res) {
     return function (response) {
       var tmp$;
       var data = response.data;
       var messageId = typeof (tmp$ = data.result.message_id) === 'number' ? tmp$ : throwCCE();
-      var user = ensureNotNull(asUser(data.result.from));
-      closure$instanceController.setMessageIdFor_5pdfst$(user, messageId);
-      println('Message posted with id ' + messageId + ', from user ' + user.firstName);
+      closure$instanceController.setMessageIdFor_5pdfst$(this$.fromUser, messageId);
+      println('Message posted with id ' + messageId + ', from user ' + this$.fromUser.firstName);
       return closure$res.end('ok');
     };
   }
@@ -76,9 +74,9 @@
       if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$instanceController_0 = closure$instanceController;
         var closure$axios_0 = closure$axios;
-        println('message received text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
+        println('message received from: ' + tmp$_0.fromUser.firstName + ', text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
-        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, res)).catch(main$lambda$lambda$lambda_0(res));
+        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
         '';
         tmp$_3 = tmp$_0;
       }
@@ -213,15 +211,14 @@
     return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', callbackQuery.message.text + callbackQuery.data), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]);
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
-    var tmp$;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$_0;
-      tmp$_0 = $receiver.iterator();
-      while (tmp$_0.hasNext()) {
-        var element = tmp$_0.next();
-        if (equals(element.user, user)) {
+      var tmp$;
+      tmp$ = $receiver.iterator();
+      while (tmp$.hasNext()) {
+        var element = tmp$.next();
+        if (element.user.id === user.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
         }
@@ -229,9 +226,7 @@
       firstOrNull$result = null;
     }
      while (false);
-    if ((tmp$ = firstOrNull$result) != null) {
-      tmp$.messageId = messageId;
-    }
+    ensureNotNull(firstOrNull$result).messageId = messageId;
   };
   InstanceController.prototype.newInstance_0 = function (message) {
     return this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
@@ -247,10 +242,6 @@
   }
   function asMessage(data) {
     var $receiver = new Message(data);
-    return $receiver.id !== -1 ? $receiver : null;
-  }
-  function asUser(data) {
-    var $receiver = new User(data);
     return $receiver.id !== -1 ? $receiver : null;
   }
   function CallbackQuery(data) {
@@ -302,7 +293,6 @@
   _.InstanceController = InstanceController;
   _.asCallbackQuery_za3rmp$ = asCallbackQuery;
   _.asMessage_za3rmp$ = asMessage;
-  _.asUser_za3rmp$ = asUser;
   _.CallbackQuery = CallbackQuery;
   _.Message = Message;
   _.User = User;

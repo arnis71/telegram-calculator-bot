@@ -24,9 +24,7 @@ class InstanceController {
     }
 
     fun setMessageIdFor(user: User, messageId: Int) {
-        instances.find { it.user == user }?.let {
-            it.messageId = messageId
-        }
+        instances.find { it.user.id == user.id }!!.messageId = messageId
     }
 
     private fun newInstance(message: Message) = instances.add(Instance(message.fromUser, message.chat))

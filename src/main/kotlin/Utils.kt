@@ -3,7 +3,6 @@ external val process: dynamic
 
 fun asCallbackQuery(data: dynamic) = CallbackQuery(data).takeIf { it.id.isNotEmpty() }
 fun asMessage(data: dynamic) = Message(data).takeIf { it.id != -1 }
-fun asUser(data: dynamic) = User(data).takeIf { it.id != -1 }
 
 class CallbackQuery(data: dynamic) {
     val id: String = data?.id as? String ?: ""
