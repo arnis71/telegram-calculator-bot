@@ -45,18 +45,19 @@ fun main(args: Array<String>) {
         } ?: asCallbackQuery(body.callback_query)?.apply {
             println("callback received from ${from.firstName}, data $data, message text ${message.text}")
 
-            axios.post(
-                "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
-                instanceController.requestFromCallback(this)
-            ).then { response ->
-                println("Callback posted")
-                res.end("ok")
-            }.catch { err ->
-                    println("Error : $err")
-                    res.end("Error : $err")
-                }
-
+            instanceController.requestFromCallback(this)?.let {
+                axios.post(
+                    "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
+                    it
+                ).then { response ->
+                    println("Callback posted")
+                    res.end("ok")
+                }.catch { err ->
+                        println("Error : $err")
+                        res.end("Error : $err")
+                    }
             ""
+            }
         }
     }
 

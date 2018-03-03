@@ -56,13 +56,13 @@
       return closure$res.end('Error : ' + err);
     };
   }
-  function main$lambda$lambda$lambda_1(closure$res) {
+  function main$lambda$lambda$lambda$lambda(closure$res) {
     return function (response) {
       println('Callback posted');
       return closure$res.end('ok');
     };
   }
-  function main$lambda$lambda$lambda_2(closure$res) {
+  function main$lambda$lambda$lambda$lambda_0(closure$res) {
     return function (err) {
       println('Error : ' + err);
       return closure$res.end('Error : ' + err);
@@ -90,11 +90,13 @@
       else {
         var tmp$_5;
         if ((tmp$_1 = asCallbackQuery(body.callback_query)) != null) {
-          var closure$axios_1 = closure$axios;
           var closure$instanceController_1 = closure$instanceController;
+          var closure$axios_1 = closure$axios;
+          var tmp$_6;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)).then(main$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda_2(res));
-          '';
+          if ((tmp$_6 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null) {
+            closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', tmp$_6).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
+          }
           tmp$_5 = tmp$_1;
         }
          else
@@ -174,13 +176,14 @@
     this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
   };
   InstanceController.prototype.requestFromCallback_y5sqzh$ = function (callbackQuery) {
+    var tmp$;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$;
-      tmp$ = $receiver.iterator();
-      while (tmp$.hasNext()) {
-        var element = tmp$.next();
+      var tmp$_0;
+      tmp$_0 = $receiver.iterator();
+      while (tmp$_0.hasNext()) {
+        var element = tmp$_0.next();
         if (element.user.id === callbackQuery.from.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
@@ -189,8 +192,8 @@
       firstOrNull$result = null;
     }
      while (false);
-    var it = ensureNotNull(firstOrNull$result);
-    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', callbackQuery.message.text + removePrefix(callbackQuery.data, 'data')), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]);
+    var $receiver_0 = ensureNotNull(firstOrNull$result);
+    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', callbackQuery.message.text + removePrefix(callbackQuery.data, 'data')), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var $receiver = this.instances_0;
