@@ -13,13 +13,15 @@ fun main(args: Array<String>) {
 
     val port = process.env.PORT ?: 3000
 
-    var messageId = 0
+    val instanceController = InstanceController()
 
     app.post("/new-message") { req, res ->
         val body = req.body
 
         asMessage(body.message)?.takeIf { it.text.contains("/start") }?.apply {
             println("message received text: $text, chatId: ${chat.id}")
+
+            instanceController.incomingMessage(this)
 
             axios.post(
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
@@ -29,8 +31,11 @@ fun main(args: Array<String>) {
                     "reply_markup" to CalculatorKeyboard(5,3).toJson()
                 )
             ).then { response ->
-                messageId = response.data.result.message_id as Int
-                println("Message posted with id $messageId")
+                val data = response.data
+                val messageId = data.result.message_id as Int
+                val user = asUser(data.result.from)!!
+                instanceController.setMessageIdFor(user, messageId)
+                println("Message posted with id $messageId, from user ${user.firstName}")
                 res.end("ok")
             }.catch { err ->
                     println("Error : $err")
@@ -39,16 +44,11 @@ fun main(args: Array<String>) {
 
             ""
         } ?: asCallbackQuery(body.callback_query)?.apply {
-            println("callback received $data")
+            println("callback received from ${from.firstName}, data $data, message text ${message.text}")
 
             axios.post(
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
-                json(
-                    "chat_id" to 224936215,
-                    "message_id" to messageId,
-                    "text" to data,
-                    "reply_markup" to CalculatorKeyboard(5,3).toJson()
-                )
+                instanceController.requestFromCallback(this)
             ).then { response ->
                 println("Callback posted")
                 res.end("ok")
@@ -59,11 +59,9 @@ fun main(args: Array<String>) {
 
             ""
         }
-
-        res.end()
     }
 
     app.listen(port) {
-        println("Telegram app listening on port $port!")
+        println("Telegram app listening on port $port")
     }
 }
