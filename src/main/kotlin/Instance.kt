@@ -7,9 +7,8 @@ class InstanceController {
     private val instances: ArrayList<Instance> = arrayListOf()
 
     fun incomingMessage(message: Message) {
-        if (message.text.contains("/start") && instances.none { it.user.id == message.fromUser.id }) {
-            newInstance(message)
-        }
+        instances.removeAll { it.user.id == message.fromUser.id }
+        instances.add(Instance(message.fromUser, message.chat))
     }
 
     fun requestFromCallback(callbackQuery: CallbackQuery): Json {
@@ -17,7 +16,7 @@ class InstanceController {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
-                "text" to callbackQuery.message.text + callbackQuery.data,
+                "text" to callbackQuery.message.text + callbackQuery.data.removePrefix("data"),
                 "reply_markup" to CalculatorKeyboard(5,3).toJson()
             )
         }
@@ -26,6 +25,4 @@ class InstanceController {
     fun setMessageIdFor(user: User, messageId: Int) {
         instances.find { it.user.id == user.id }!!.messageId = messageId
     }
-
-    private fun newInstance(message: Message) = instances.add(Instance(message.fromUser, message.chat))
 }

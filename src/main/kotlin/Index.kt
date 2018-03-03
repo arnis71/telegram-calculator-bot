@@ -27,12 +27,11 @@ fun main(args: Array<String>) {
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
                 json(
                     "chat_id" to chat.id,
-                    "text" to "0",
+                    "text" to Processor.DEFAULT_INPUT,
                     "reply_markup" to CalculatorKeyboard(5,3).toJson()
                 )
             ).then { response ->
-                val data = response.data
-                val messageId = data.result.message_id as Int
+                val messageId = response.data.result.message_id as Int
                 instanceController.setMessageIdFor(fromUser, messageId)
 
                 println("Message posted with id $messageId, from user ${fromUser.firstName}")

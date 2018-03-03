@@ -15,7 +15,10 @@
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
+  var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var ensureNotNull = Kotlin.ensureNotNull;
+  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
+  var Kind_OBJECT = Kotlin.Kind.OBJECT;
   function CalculatorKeyboard(rows, cols) {
     this.rows_0 = rows;
     this.cols_0 = cols;
@@ -41,8 +44,7 @@
   function main$lambda$lambda$lambda(closure$instanceController, this$, closure$res) {
     return function (response) {
       var tmp$;
-      var data = response.data;
-      var messageId = typeof (tmp$ = data.result.message_id) === 'number' ? tmp$ : throwCCE();
+      var messageId = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
       closure$instanceController.setMessageIdFor_5pdfst$(this$.fromUser, messageId);
       println('Message posted with id ' + messageId + ', from user ' + this$.fromUser.firstName);
       return closure$res.end('ok');
@@ -76,7 +78,7 @@
         var closure$axios_0 = closure$axios;
         println('message received from: ' + tmp$_0.fromUser.firstName + ', text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
-        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
+        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', Processor$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
         '';
         tmp$_3 = tmp$_0;
       }
@@ -162,34 +164,14 @@
   function InstanceController() {
     this.instances_0 = ArrayList_init();
   }
-  var Collection = Kotlin.kotlin.collections.Collection;
+  function InstanceController$incomingMessage$lambda(closure$message) {
+    return function (it) {
+      return it.user.id === closure$message.fromUser.id;
+    };
+  }
   InstanceController.prototype.incomingMessage_rphee1$ = function (message) {
-    var tmp$ = contains(message.text, '/start');
-    if (tmp$) {
-      var $receiver = this.instances_0;
-      var none$result;
-      none$break: do {
-        var tmp$_0;
-        if (Kotlin.isType($receiver, Collection) && $receiver.isEmpty()) {
-          none$result = true;
-          break none$break;
-        }
-        tmp$_0 = $receiver.iterator();
-        while (tmp$_0.hasNext()) {
-          var element = tmp$_0.next();
-          if (element.user.id === message.fromUser.id) {
-            none$result = false;
-            break none$break;
-          }
-        }
-        none$result = true;
-      }
-       while (false);
-      tmp$ = none$result;
-    }
-    if (tmp$) {
-      this.newInstance_0(message);
-    }
+    removeAll(this.instances_0, InstanceController$incomingMessage$lambda(message));
+    this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
   };
   InstanceController.prototype.requestFromCallback_y5sqzh$ = function (callbackQuery) {
     var $receiver = this.instances_0;
@@ -208,7 +190,7 @@
     }
      while (false);
     var it = ensureNotNull(firstOrNull$result);
-    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', callbackQuery.message.text + callbackQuery.data), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]);
+    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', callbackQuery.message.text + removePrefix(callbackQuery.data, 'data')), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]);
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var $receiver = this.instances_0;
@@ -228,12 +210,43 @@
      while (false);
     ensureNotNull(firstOrNull$result).messageId = messageId;
   };
-  InstanceController.prototype.newInstance_0 = function (message) {
-    return this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
-  };
   InstanceController.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'InstanceController',
+    interfaces: []
+  };
+  function Processor() {
+    Processor$Companion_getInstance();
+    this.currentInput_0 = Processor$Companion_getInstance().DEFAULT_INPUT;
+  }
+  Processor.prototype.process_61zpoe$ = function (input) {
+  };
+  function Processor$Companion() {
+    Processor$Companion_instance = this;
+    this.DEFAULT_INPUT = '0';
+  }
+  Processor$Companion.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'Companion',
+    interfaces: []
+  };
+  var Processor$Companion_instance = null;
+  function Processor$Companion_getInstance() {
+    if (Processor$Companion_instance === null) {
+      new Processor$Companion();
+    }
+    return Processor$Companion_instance;
+  }
+  Processor.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'Processor',
+    interfaces: []
+  };
+  function CalculatorAction() {
+  }
+  CalculatorAction.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'CalculatorAction',
     interfaces: []
   };
   function asCallbackQuery(data) {
@@ -291,6 +304,11 @@
   _.main_kand9s$ = main;
   _.Instance = Instance;
   _.InstanceController = InstanceController;
+  Object.defineProperty(Processor, 'Companion', {
+    get: Processor$Companion_getInstance
+  });
+  _.Processor = Processor;
+  _.CalculatorAction = CalculatorAction;
   _.asCallbackQuery_za3rmp$ = asCallbackQuery;
   _.asMessage_za3rmp$ = asMessage;
   _.CallbackQuery = CallbackQuery;
