@@ -59,6 +59,8 @@ fun main(args: Array<String>) {
             ""
             }
         }
+
+        res.end("ok")
     }
 
     app.listen(port) {

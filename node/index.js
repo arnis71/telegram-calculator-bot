@@ -70,9 +70,9 @@
   }
   function main$lambda(closure$instanceController, closure$axios) {
     return function (req, res) {
-      var tmp$, tmp$_0, tmp$_1, tmp$_2;
+      var tmp$, tmp$_0, tmp$_1;
       var body = req.body;
-      var tmp$_3;
+      var tmp$_2;
       if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$instanceController_0 = closure$instanceController;
         var closure$axios_0 = closure$axios;
@@ -80,30 +80,22 @@
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
         closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', Processor$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
         '';
-        tmp$_3 = tmp$_0;
+        tmp$_2 = tmp$_0;
       }
        else
-        tmp$_3 = null;
-      var tmp$_4;
-      if ((tmp$_2 = tmp$_3) != null)
-        tmp$_4 = tmp$_2;
-      else {
-        var tmp$_5;
+        tmp$_2 = null;
+      if (tmp$_2 == null) {
         if ((tmp$_1 = asCallbackQuery(body.callback_query)) != null) {
           var closure$instanceController_1 = closure$instanceController;
           var closure$axios_1 = closure$axios;
-          var tmp$_6;
+          var tmp$_3;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          if ((tmp$_6 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null) {
-            closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', tmp$_6).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
+          if ((tmp$_3 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null) {
+            closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', tmp$_3).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
           }
-          tmp$_5 = tmp$_1;
         }
-         else
-          tmp$_5 = null;
-        tmp$_4 = tmp$_5;
       }
-      return tmp$_4;
+      return res.end('ok');
     };
   }
   function main$lambda_0(closure$port) {
