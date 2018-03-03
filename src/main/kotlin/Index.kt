@@ -13,6 +13,8 @@ fun main(args: Array<String>) {
 
     val port = process.env.PORT ?: 3000
 
+    var messageId = 0
+
     app.post("/new-message") { req, res ->
         val body = req.body
 
@@ -27,7 +29,8 @@ fun main(args: Array<String>) {
                     "reply_markup" to CalculatorKeyboard(5,3).toJson()
                 )
             ).then { response ->
-                println("Message posted")
+                messageId = response.data.result.message_id as Int
+                println("Message posted with id $messageId")
                 res.end("ok")
             }.catch { err ->
                     println("Error : $err")
@@ -37,6 +40,24 @@ fun main(args: Array<String>) {
             ""
         } ?: asCallbackQuery(body.callback_query)?.apply {
             println("callback received $data")
+
+            axios.post(
+                "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
+                json(
+                    "chat_id" to 224936215,
+                    "message_id" to messageId,
+                    "text" to data,
+                    "reply_markup" to CalculatorKeyboard(5,3).toJson()
+                )
+            ).then { response ->
+                println("Callback posted")
+                res.end("ok")
+            }.catch { err ->
+                    println("Error : $err")
+                    res.end("Error : $err")
+                }
+
+            ""
         }
 
         res.end()

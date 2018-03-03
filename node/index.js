@@ -13,6 +13,7 @@
   var Kind_CLASS = Kotlin.Kind.CLASS;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   function CalculatorKeyboard(rows, cols) {
     this.rows_0 = rows;
@@ -36,9 +37,11 @@
     simpleName: 'CalculatorKeyboard',
     interfaces: []
   };
-  function main$lambda$lambda$lambda(closure$res) {
+  function main$lambda$lambda$lambda(closure$messageId, closure$res) {
     return function (response) {
-      println('Message posted');
+      var tmp$;
+      closure$messageId.v = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
+      println('Message posted with id ' + closure$messageId.v);
       return closure$res.end('ok');
     };
   }
@@ -48,15 +51,28 @@
       return closure$res.end('Error : ' + err);
     };
   }
-  function main$lambda(closure$axios) {
+  function main$lambda$lambda$lambda_1(closure$res) {
+    return function (response) {
+      println('Callback posted');
+      return closure$res.end('ok');
+    };
+  }
+  function main$lambda$lambda$lambda_2(closure$res) {
+    return function (err) {
+      println('Error : ' + err);
+      return closure$res.end('Error : ' + err);
+    };
+  }
+  function main$lambda(closure$axios, closure$messageId) {
     return function (req, res) {
       var tmp$, tmp$_0, tmp$_1;
       var body = req.body;
       var tmp$_2;
       if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$axios_0 = closure$axios;
+        var closure$messageId_0 = closure$messageId;
         println('message received text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
-        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda_0(res));
+        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', '0'), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$messageId_0, res)).catch(main$lambda$lambda$lambda_0(res));
         '';
         tmp$_2 = tmp$_0;
       }
@@ -64,7 +80,11 @@
         tmp$_2 = null;
       if (tmp$_2 == null) {
         if ((tmp$_1 = asCallbackQuery(body.callback_query)) != null) {
+          var closure$axios_1 = closure$axios;
+          var closure$messageId_1 = closure$messageId;
           println('callback received ' + tmp$_1.data);
+          closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', json([to('chat_id', 224936215), to('message_id', closure$messageId_1.v), to('text', tmp$_1.data), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda_2(res));
+          '';
         }
       }
       return res.end();
@@ -85,7 +105,8 @@
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
     var port = (tmp$ = process.env.PORT) != null ? tmp$ : 3000;
-    app.post('/new-message', main$lambda(axios));
+    var messageId = {v: 0};
+    app.post('/new-message', main$lambda(axios, messageId));
     app.listen(port, main$lambda_0(port));
   }
   function asCallbackQuery(data) {
