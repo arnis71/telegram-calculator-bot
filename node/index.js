@@ -371,7 +371,7 @@
   function Api() {
     Api_instance = this;
     this.BASE_URL_0 = 'https://api.telegram.org/';
-    this.KEY_0 = 'bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4';
+    this.KEY_0 = '518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4';
   }
   Api.prototype.forEndpoint_61zpoe$ = function (path) {
     return this.BASE_URL_0 + 'bot' + this.KEY_0 + '/' + path;
