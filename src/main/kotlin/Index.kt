@@ -35,7 +35,7 @@ fun main(args: Array<String>) {
                 val messageId = response.data.result.message_id as Int
                 val success = instanceController.setMessageIdFor(it.fromUser, messageId)
 
-                println("Message posted with id $messageId from: ${it.fromUser.firstName}, success $success")
+                println("Message posted with id $messageId from: ${it.fromUser.firstName}")
 
                 res.end(
                     if (success)

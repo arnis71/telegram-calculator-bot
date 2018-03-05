@@ -17,6 +17,7 @@
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
+  var ensureNotNull = Kotlin.ensureNotNull;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var equals = Kotlin.equals;
   var startsWith = Kotlin.kotlin.text.startsWith_7epoxm$;
@@ -75,7 +76,7 @@
       var tmp$;
       var messageId = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
       var success = closure$instanceController.setMessageIdFor_5pdfst$(closure$it.fromUser, messageId);
-      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName + ', success ' + success);
+      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName);
       return closure$res.end(success ? 'ok' : 'error');
     };
   }
@@ -192,14 +193,13 @@
     this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
   };
   InstanceController.prototype.requestFromCallback_y5sqzh$ = function (callbackQuery) {
-    var tmp$, tmp$_0;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$_1;
-      tmp$_1 = $receiver.iterator();
-      while (tmp$_1.hasNext()) {
-        var element = tmp$_1.next();
+      var tmp$;
+      tmp$ = $receiver.iterator();
+      while (tmp$.hasNext()) {
+        var element = tmp$.next();
         if (element.user.id === callbackQuery.from.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
@@ -208,7 +208,9 @@
       firstOrNull$result = null;
     }
      while (false);
-    return (tmp$_0 = (tmp$ = firstOrNull$result) != null ? tmp$.messageId === callbackQuery.message.id ? tmp$ : null : null) != null ? json([to('chat_id', tmp$_0.chat.id), to('message_id', tmp$_0.messageId), to('text', tmp$_0.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', get_keyboard().toJson())]) : null;
+    var $receiver_0 = ensureNotNull(firstOrNull$result);
+    var it = ensureNotNull($receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null);
+    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', it.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', get_keyboard().toJson())]);
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var tmp$, tmp$_0;

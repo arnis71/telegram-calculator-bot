@@ -14,7 +14,7 @@ class InstanceController {
     }
 
     fun requestFromCallback(callbackQuery: CallbackQuery): Json? {
-        return instances.find { it.user.id == callbackQuery.from.id }?.takeIf { it.messageId == callbackQuery.message.id }?.let {
+        return instances.find { it.user.id == callbackQuery.from.id }!!.takeIf { it.messageId == callbackQuery.message.id }!!.let {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
