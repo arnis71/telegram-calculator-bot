@@ -4,17 +4,17 @@ class Processor {
     private var action: CalculatorAction? = null
 
     fun process(input: String) : String {
-        action?.let {
-            secondValue += input
-            return secondValue
-        } ?: CalculatorAction.values().find { it.title == input }
+        CalculatorAction.values().find { it.title == input }
             ?.let {
                 action = it
                 return calculate()
             }
-        ?: kotlin.run {
+        ?: action?.let {
+            secondValue += input
+            return secondValue.removePrefix("0")
+        } ?: run {
             firstValue += input
-            return firstValue
+            return firstValue.removePrefix("0")
         }
     }
 

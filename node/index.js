@@ -306,44 +306,45 @@
     this.action_0 = null;
   }
   Processor.prototype.process_61zpoe$ = function (input) {
-    var tmp$, tmp$_0;
+    var tmp$;
+    var tmp$_0;
     var tmp$_1;
-    if (this.action_0 != null) {
-      this.secondValue_0 += input;
-      return this.secondValue_0;
+    var $receiver = CalculatorAction$values();
+    var firstOrNull$result;
+    firstOrNull$break: do {
+      var tmp$_2;
+      for (tmp$_2 = 0; tmp$_2 !== $receiver.length; ++tmp$_2) {
+        var element = $receiver[tmp$_2];
+        if (equals(element.title, input)) {
+          firstOrNull$result = element;
+          break firstOrNull$break;
+        }
+      }
+      firstOrNull$result = null;
+    }
+     while (false);
+    if ((tmp$ = firstOrNull$result) != null) {
+      this.action_0 = tmp$;
+      return this.calculate_0();
     }
      else
       tmp$_1 = null;
-    var tmp$_2;
+    var tmp$_3;
     if ((tmp$_0 = tmp$_1) != null)
-      tmp$_2 = tmp$_0;
+      tmp$_3 = tmp$_0;
     else {
-      var tmp$_3;
-      var $receiver = CalculatorAction$values();
-      var firstOrNull$result;
-      firstOrNull$break: do {
-        var tmp$_4;
-        for (tmp$_4 = 0; tmp$_4 !== $receiver.length; ++tmp$_4) {
-          var element = $receiver[tmp$_4];
-          if (equals(element.title, input)) {
-            firstOrNull$result = element;
-            break firstOrNull$break;
-          }
-        }
-        firstOrNull$result = null;
-      }
-       while (false);
-      if ((tmp$ = firstOrNull$result) != null) {
-        this.action_0 = tmp$;
-        return this.calculate_0();
+      var tmp$_4;
+      if (this.action_0 != null) {
+        this.secondValue_0 += input;
+        return removePrefix(this.secondValue_0, '0');
       }
        else
-        tmp$_3 = null;
-      tmp$_2 = tmp$_3;
+        tmp$_4 = null;
+      tmp$_3 = tmp$_4;
     }
-    if (tmp$_2 == null) {
+    if (tmp$_3 == null) {
       this.firstValue_0 += input;
-      return this.firstValue_0;
+      return removePrefix(this.firstValue_0, '0');
     }
   };
   var IllegalArgumentException_init = Kotlin.kotlin.IllegalArgumentException_init_pdl1vj$;
