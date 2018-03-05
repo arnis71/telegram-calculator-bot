@@ -210,7 +210,7 @@
      while (false);
     var $receiver_0 = ensureNotNull(firstOrNull$result);
     var it = ensureNotNull($receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null);
-    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', it.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', get_keyboard().toJson())]);
+    return json([to('chat_id', it.chat.id), to('message_id', it.messageId), to('text', removePrefix(callbackQuery.data, 'data')), to('reply_markup', get_keyboard().toJson())]);
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var tmp$, tmp$_0;
