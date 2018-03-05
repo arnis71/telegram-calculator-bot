@@ -75,7 +75,7 @@
       var tmp$;
       var messageId = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
       var success = closure$instanceController.setMessageIdFor_5pdfst$(closure$it.fromUser, messageId);
-      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName);
+      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName + ', success ' + success);
       return closure$res.end(success ? 'ok' : 'error');
     };
   }
