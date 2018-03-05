@@ -1,7 +1,11 @@
 import kotlin.js.Json
 import kotlin.js.json
 
-data class Instance(val user: User, val chat: Chat, var messageId: Int = -1)
+data class Instance(val user: User, val chat: Chat, var messageId: Int = -1) {
+    private val processor: Processor = Processor()
+
+    fun process(input: String) = processor.process(input)
+}
 
 class InstanceController {
     private val instances: ArrayList<Instance> = arrayListOf()
@@ -16,7 +20,7 @@ class InstanceController {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
-                "text" to callbackQuery.message.text + callbackQuery.data.removePrefix("data"),
+                "text" to it.process(callbackQuery.data.removePrefix("data")),
                 "reply_markup" to CalculatorKeyboard(5,3).toJson()
             )
         }

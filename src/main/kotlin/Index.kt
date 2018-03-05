@@ -1,3 +1,4 @@
+import CalculatorKeyboard.Companion.DEFAULT_INPUT
 import kotlin.js.json
 
 fun main(args: Array<String>) {
@@ -27,7 +28,7 @@ fun main(args: Array<String>) {
                 "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
                 json(
                     "chat_id" to chat.id,
-                    "text" to Processor.DEFAULT_INPUT,
+                    "text" to DEFAULT_INPUT,
                     "reply_markup" to CalculatorKeyboard(5,3).toJson()
                 )
             ).then { response ->
@@ -37,9 +38,9 @@ fun main(args: Array<String>) {
                 println("Message posted with id $messageId, from user ${fromUser.firstName}")
                 res.end("ok")
             }.catch { err ->
-                    println("Error : $err")
-                    res.end("Error : $err")
-                }
+                println("Error : $err")
+                res.end("Error : $err")
+            }
 
             ""
         } ?: asCallbackQuery(body.callback_query)?.apply {
@@ -49,13 +50,13 @@ fun main(args: Array<String>) {
                 axios.post(
                     "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
                     it
-                ).then { response ->
+                ).then { _ ->
                     println("Callback posted")
                     res.end("ok")
                 }.catch { err ->
-                        println("Error : $err")
-                        res.end("Error : $err")
-                    }
+                    println("Error : $err")
+                    res.end("Error : $err")
+                }
             ""
             }
         }

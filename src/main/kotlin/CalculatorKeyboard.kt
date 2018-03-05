@@ -14,7 +14,7 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
                 else
                     it.toString()
             }
-            .plus(sequenceOf("AC", "+", "-"))
+            .plus(sequenceOf(CalculatorAction.RESET.title, CalculatorAction.ADD.title, CalculatorAction.SUB.title))
             .map { json(
                 "text" to it,
                 "callback_data" to "data$it"
@@ -23,4 +23,23 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
             .toList()
             .reversed()
     )
+
+    companion object {
+        const val DEFAULT_INPUT = "0"
+    }
+}
+
+enum class CalculatorAction(val title: String) {
+    RESET("AC"),
+    ADD("+"),
+    SUB("-");
+
+    fun calculate(firstValue: String, secondValue: String): String {
+        return when (title) {
+            RESET.title -> CalculatorKeyboard.DEFAULT_INPUT
+            ADD.title -> (firstValue.toInt() + secondValue.toInt()).toString()
+            SUB.title -> (firstValue.toInt() - secondValue.toInt()).toString()
+            else -> CalculatorKeyboard.DEFAULT_INPUT
+        }
+    }
 }

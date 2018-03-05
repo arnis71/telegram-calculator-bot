@@ -9,8 +9,13 @@
   var chunked = Kotlin.kotlin.sequences.chunked_wuwhe2$;
   var toList = Kotlin.kotlin.sequences.toList_veqyi0$;
   var reversed = Kotlin.kotlin.collections.reversed_7wnvza$;
+  var Kind_OBJECT = Kotlin.Kind.OBJECT;
   var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
   var Kind_CLASS = Kotlin.Kind.CLASS;
+  var equals = Kotlin.equals;
+  var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
+  var Enum = Kotlin.kotlin.Enum;
+  var throwISE = Kotlin.throwISE;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
@@ -18,8 +23,10 @@
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var ensureNotNull = Kotlin.ensureNotNull;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
-  var Kind_OBJECT = Kotlin.Kind.OBJECT;
+  CalculatorAction.prototype = Object.create(Enum.prototype);
+  CalculatorAction.prototype.constructor = CalculatorAction;
   function CalculatorKeyboard(rows, cols) {
+    CalculatorKeyboard$Companion_getInstance();
     this.rows_0 = rows;
     this.cols_0 = cols;
     this.numbers_0 = generateSequence(1, CalculatorKeyboard$numbers$lambda);
@@ -31,8 +38,24 @@
     return json([to('text', it), to('callback_data', 'data' + it)]);
   }
   CalculatorKeyboard.prototype.toJson = function () {
-    return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf(['AC', '+', '-'])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
+    return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf([CalculatorAction$RESET_getInstance().title, CalculatorAction$ADD_getInstance().title, CalculatorAction$SUB_getInstance().title])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
   };
+  function CalculatorKeyboard$Companion() {
+    CalculatorKeyboard$Companion_instance = this;
+    this.DEFAULT_INPUT = '0';
+  }
+  CalculatorKeyboard$Companion.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'Companion',
+    interfaces: []
+  };
+  var CalculatorKeyboard$Companion_instance = null;
+  function CalculatorKeyboard$Companion_getInstance() {
+    if (CalculatorKeyboard$Companion_instance === null) {
+      new CalculatorKeyboard$Companion();
+    }
+    return CalculatorKeyboard$Companion_instance;
+  }
   function CalculatorKeyboard$numbers$lambda(it) {
     return it + 1 | 0;
   }
@@ -41,6 +64,68 @@
     simpleName: 'CalculatorKeyboard',
     interfaces: []
   };
+  function CalculatorAction(name, ordinal, title) {
+    Enum.call(this);
+    this.title = title;
+    this.name$ = name;
+    this.ordinal$ = ordinal;
+  }
+  function CalculatorAction_initFields() {
+    CalculatorAction_initFields = function () {
+    };
+    CalculatorAction$RESET_instance = new CalculatorAction('RESET', 0, 'AC');
+    CalculatorAction$ADD_instance = new CalculatorAction('ADD', 1, '+');
+    CalculatorAction$SUB_instance = new CalculatorAction('SUB', 2, '-');
+  }
+  var CalculatorAction$RESET_instance;
+  function CalculatorAction$RESET_getInstance() {
+    CalculatorAction_initFields();
+    return CalculatorAction$RESET_instance;
+  }
+  var CalculatorAction$ADD_instance;
+  function CalculatorAction$ADD_getInstance() {
+    CalculatorAction_initFields();
+    return CalculatorAction$ADD_instance;
+  }
+  var CalculatorAction$SUB_instance;
+  function CalculatorAction$SUB_getInstance() {
+    CalculatorAction_initFields();
+    return CalculatorAction$SUB_instance;
+  }
+  CalculatorAction.prototype.calculate_puj7f4$ = function (firstValue, secondValue) {
+    var tmp$, tmp$_0;
+    tmp$ = this.title;
+    if (equals(tmp$, CalculatorAction$RESET_getInstance().title))
+      tmp$_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+    else if (equals(tmp$, CalculatorAction$ADD_getInstance().title))
+      tmp$_0 = (toInt(firstValue) + toInt(secondValue) | 0).toString();
+    else if (equals(tmp$, CalculatorAction$SUB_getInstance().title))
+      tmp$_0 = (toInt(firstValue) - toInt(secondValue) | 0).toString();
+    else
+      tmp$_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+    return tmp$_0;
+  };
+  CalculatorAction.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'CalculatorAction',
+    interfaces: [Enum]
+  };
+  function CalculatorAction$values() {
+    return [CalculatorAction$RESET_getInstance(), CalculatorAction$ADD_getInstance(), CalculatorAction$SUB_getInstance()];
+  }
+  CalculatorAction.values = CalculatorAction$values;
+  function CalculatorAction$valueOf(name) {
+    switch (name) {
+      case 'RESET':
+        return CalculatorAction$RESET_getInstance();
+      case 'ADD':
+        return CalculatorAction$ADD_getInstance();
+      case 'SUB':
+        return CalculatorAction$SUB_getInstance();
+      default:throwISE('No enum constant CalculatorAction.' + name);
+    }
+  }
+  CalculatorAction.valueOf_61zpoe$ = CalculatorAction$valueOf;
   function main$lambda$lambda$lambda(closure$instanceController, this$, closure$res) {
     return function (response) {
       var tmp$;
@@ -57,7 +142,7 @@
     };
   }
   function main$lambda$lambda$lambda$lambda(closure$res) {
-    return function (response) {
+    return function (f) {
       println('Callback posted');
       return closure$res.end('ok');
     };
@@ -78,7 +163,7 @@
         var closure$axios_0 = closure$axios;
         println('message received from: ' + tmp$_0.fromUser.firstName + ', text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
-        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', Processor$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
+        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
         '';
         tmp$_2 = tmp$_0;
       }
@@ -123,7 +208,11 @@
     this.user = user;
     this.chat = chat;
     this.messageId = messageId;
+    this.processor_0 = new Processor();
   }
+  Instance.prototype.process_61zpoe$ = function (input) {
+    return this.processor_0.process_61zpoe$(input);
+  };
   Instance.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Instance',
@@ -185,7 +274,7 @@
     }
      while (false);
     var $receiver_0 = ensureNotNull(firstOrNull$result);
-    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', callbackQuery.message.text + removePrefix(callbackQuery.data, 'data')), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
+    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', tmp$.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var $receiver = this.instances_0;
@@ -211,37 +300,67 @@
     interfaces: []
   };
   function Processor() {
-    Processor$Companion_getInstance();
-    this.currentInput_0 = Processor$Companion_getInstance().DEFAULT_INPUT;
+    this.firstValue_0 = '';
+    this.secondValue_0 = '';
+    this.action_0 = null;
   }
   Processor.prototype.process_61zpoe$ = function (input) {
-  };
-  function Processor$Companion() {
-    Processor$Companion_instance = this;
-    this.DEFAULT_INPUT = '0';
-  }
-  Processor$Companion.$metadata$ = {
-    kind: Kind_OBJECT,
-    simpleName: 'Companion',
-    interfaces: []
-  };
-  var Processor$Companion_instance = null;
-  function Processor$Companion_getInstance() {
-    if (Processor$Companion_instance === null) {
-      new Processor$Companion();
+    var tmp$, tmp$_0;
+    var tmp$_1;
+    if (this.action_0 != null) {
+      this.secondValue_0 += input;
+      tmp$_1 = Unit;
     }
-    return Processor$Companion_instance;
-  }
+     else
+      tmp$_1 = null;
+    var tmp$_2;
+    if ((tmp$_0 = tmp$_1) != null)
+      tmp$_2 = tmp$_0;
+    else {
+      var tmp$_3;
+      var $receiver = CalculatorAction$values();
+      var firstOrNull$result;
+      firstOrNull$break: do {
+        var tmp$_4;
+        for (tmp$_4 = 0; tmp$_4 !== $receiver.length; ++tmp$_4) {
+          var element = $receiver[tmp$_4];
+          if (equals(element.title, input)) {
+            firstOrNull$result = element;
+            break firstOrNull$break;
+          }
+        }
+        firstOrNull$result = null;
+      }
+       while (false);
+      if ((tmp$ = firstOrNull$result) != null) {
+        this.action_0 = tmp$;
+        return this.calculate_0();
+      }
+       else
+        tmp$_3 = null;
+      tmp$_2 = tmp$_3;
+    }
+    if (tmp$_2 == null) {
+      this.firstValue_0 += input;
+    }
+    return input;
+  };
+  var IllegalArgumentException_init = Kotlin.kotlin.IllegalArgumentException_init_pdl1vj$;
+  Processor.prototype.calculate_0 = function () {
+    var value = this.action_0;
+    var requireNotNull$result;
+    if (value == null) {
+      var message = 'Required value was null.';
+      throw IllegalArgumentException_init(message.toString());
+    }
+     else {
+      requireNotNull$result = value;
+    }
+    return requireNotNull$result.calculate_puj7f4$(this.firstValue_0, this.secondValue_0);
+  };
   Processor.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Processor',
-    interfaces: []
-  };
-  function CalculatorAction() {
-  }
-  CalculatorAction.$metadata$ = {
-    kind: Kind_CLASS,
-    simpleName: 'CalculatorAction',
     interfaces: []
   };
   function asCallbackQuery(data) {
@@ -295,15 +414,24 @@
     simpleName: 'Chat',
     interfaces: []
   };
+  Object.defineProperty(CalculatorKeyboard, 'Companion', {
+    get: CalculatorKeyboard$Companion_getInstance
+  });
   _.CalculatorKeyboard = CalculatorKeyboard;
+  Object.defineProperty(CalculatorAction, 'RESET', {
+    get: CalculatorAction$RESET_getInstance
+  });
+  Object.defineProperty(CalculatorAction, 'ADD', {
+    get: CalculatorAction$ADD_getInstance
+  });
+  Object.defineProperty(CalculatorAction, 'SUB', {
+    get: CalculatorAction$SUB_getInstance
+  });
+  _.CalculatorAction = CalculatorAction;
   _.main_kand9s$ = main;
   _.Instance = Instance;
   _.InstanceController = InstanceController;
-  Object.defineProperty(Processor, 'Companion', {
-    get: Processor$Companion_getInstance
-  });
   _.Processor = Processor;
-  _.CalculatorAction = CalculatorAction;
   _.asCallbackQuery_za3rmp$ = asCallbackQuery;
   _.asMessage_za3rmp$ = asMessage;
   _.CallbackQuery = CallbackQuery;
