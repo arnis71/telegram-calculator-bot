@@ -1,6 +1,6 @@
 class Processor {
-    private var firstValue = ""
-    private var secondValue = ""
+    private var firstValue = CalculatorKeyboard.DEFAULT_INPUT
+    private var secondValue = CalculatorKeyboard.DEFAULT_INPUT
     private var action: CalculatorAction? = null
 
     fun process(input: String) : String {
