@@ -14,11 +14,11 @@ class InstanceController {
     }
 
     fun requestFromCallback(callbackQuery: CallbackQuery): Json? {
-        return instances.find { it.user.id == callbackQuery.from.id }!!.takeIf { it.messageId == callbackQuery.message.id }!!.let {
+        return instances.find { it.user.id == callbackQuery.from.id }?.takeIf { it.messageId == callbackQuery.message.id }?.let {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
-                "text" to /*it.processor.process(*/callbackQuery.data.removePrefix("data")/*)*/,
+                "text" to it.processor.process(callbackQuery.data.removePrefix("data")),
                 "reply_markup" to keyboard.toJson()
             )
         }

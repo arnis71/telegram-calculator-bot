@@ -21,10 +21,10 @@ class Processor {
             firstValue
             }
 
-        return if (out.length > 1 && out.startsWith(DEFAULT_INPUT))
+        return (if (out.length > 1 && out.startsWith(DEFAULT_INPUT))
             out.substring(out.length)
         else
-            out
+            out).also { println("debug $it") }
     }
 
     private fun calculate(actionTitle: String): String {
