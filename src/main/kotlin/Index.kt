@@ -53,14 +53,16 @@ fun main(args: Array<String>) {
                     json(
                         "chat_id" to instance.chat.id,
                         "message_id" to instance.messageId,
-                        "text" to instance.processor.process(it.data.removePrefix("data")),
+                        "text" to instance.processor.process(it.data.removePrefix("data")).also {
+                            println("callback text $it")
+                        },
                         "reply_markup" to keyboard.toJson()
                     )
                 ).then { _ ->
                     println("Callback posted")
                     res.end("ok")
                 }.catch { err -> res.end("Error : $err") }
-            }
+            } ?: res.end("ok")
         }
 
         res.end("ok")
