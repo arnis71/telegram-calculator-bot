@@ -47,10 +47,15 @@ fun main(args: Array<String>) {
         } ?: asCallbackQuery(body.callback_query)?.let {
             println("callback received from ${it.from.firstName}, data ${it.data}, message text ${it.message.text}")
 
-            instanceController.requestFromCallback(it)?.let { json ->
+            instanceController.incomingCallback(it)?.let { instance ->
                 axios.post(
                     Api.forEndpoint("editMessageText"),
-                    json
+                    json(
+                        "chat_id" to instance.chat.id,
+                        "message_id" to instance.messageId,
+                        "text" to instance.processor.process(it.data.removePrefix("data")),
+                        "reply_markup" to keyboard.toJson()
+                    )
                 ).then { _ ->
                     println("Callback posted")
                     res.end("ok")

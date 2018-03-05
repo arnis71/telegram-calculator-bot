@@ -1,6 +1,3 @@
-import kotlin.js.Json
-import kotlin.js.json
-
 data class Instance(val user: User, val chat: Chat, var messageId: Int = -1) {
     val processor: Processor = Processor()
 }
@@ -13,15 +10,9 @@ class InstanceController {
         instances.add(Instance(message.fromUser, message.chat))
     }
 
-    fun requestFromCallback(callbackQuery: CallbackQuery): Json? {
-        return instances.find { it.user.id == callbackQuery.from.id }?.takeIf { it.messageId == callbackQuery.message.id }?.let {
-            json(
-                "chat_id" to it.chat.id,
-                "message_id" to it.messageId,
-                "text" to it.processor.process(callbackQuery.data.removePrefix("data")),
-                "reply_markup" to keyboard.toJson()
-            )
-        }
+    fun incomingCallback(callbackQuery: CallbackQuery): Instance? {
+        return instances.find { it.user.id == callbackQuery.from.id }
+            ?.takeIf { it.messageId == callbackQuery.message.id }
     }
 
     fun setMessageIdFor(user: User, messageId: Int): Boolean {

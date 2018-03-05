@@ -15,9 +15,9 @@
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
+  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
-  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var equals = Kotlin.equals;
   var startsWith = Kotlin.kotlin.text.startsWith_7epoxm$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
@@ -115,7 +115,7 @@
           var closure$axios_1 = closure$axios;
           var tmp$_3;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          (tmp$_3 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null && closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), tmp$_3).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
+          (tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null && closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', tmp$_3.processor.process_61zpoe$(removePrefix(tmp$_1.data, 'data'))), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
         }
       }
       return res.end('ok');
@@ -191,15 +191,15 @@
     removeAll(this.instances_0, InstanceController$incomingMessage$lambda(message));
     this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
   };
-  InstanceController.prototype.requestFromCallback_y5sqzh$ = function (callbackQuery) {
-    var tmp$, tmp$_0;
+  InstanceController.prototype.incomingCallback_y5sqzh$ = function (callbackQuery) {
+    var tmp$;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$_1;
-      tmp$_1 = $receiver.iterator();
-      while (tmp$_1.hasNext()) {
-        var element = tmp$_1.next();
+      var tmp$_0;
+      tmp$_0 = $receiver.iterator();
+      while (tmp$_0.hasNext()) {
+        var element = tmp$_0.next();
         if (element.user.id === callbackQuery.from.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
@@ -208,7 +208,7 @@
       firstOrNull$result = null;
     }
      while (false);
-    return (tmp$_0 = (tmp$ = firstOrNull$result) != null ? tmp$.messageId === callbackQuery.message.id ? tmp$ : null : null) != null ? json([to('chat_id', tmp$_0.chat.id), to('message_id', tmp$_0.messageId), to('text', tmp$_0.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', get_keyboard().toJson())]) : null;
+    return (tmp$ = firstOrNull$result) != null ? tmp$.messageId === callbackQuery.message.id ? tmp$ : null : null;
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var tmp$, tmp$_0;
