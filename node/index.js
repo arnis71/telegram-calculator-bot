@@ -19,7 +19,6 @@
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var equals = Kotlin.equals;
-  var startsWith = Kotlin.kotlin.text.startsWith_7epoxm$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   function CalculatorKeyboard(rows, cols) {
     CalculatorKeyboard$Companion_getInstance();
@@ -262,7 +261,7 @@
     else {
       var tmp$_4;
       if (this.action_0 != null) {
-        this.secondValue_0 += input;
+        this.secondValue_0 = removePrefix(this.secondValue_0, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT) + input;
         tmp$_4 = this.secondValue_0;
       }
        else
@@ -273,19 +272,10 @@
     if ((tmp$_1 = tmp$_3) != null)
       tmp$_5 = tmp$_1;
     else {
-      this.firstValue_0 += input;
+      this.firstValue_0 = removePrefix(this.firstValue_0, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT) + input;
       tmp$_5 = this.firstValue_0;
     }
-    var out = tmp$_5;
-    println('input ' + input + ' output ' + out);
-    var tmp$_6;
-    if (out.length > 1 && startsWith(out, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
-      var startIndex = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT.length;
-      tmp$_6 = out.substring(startIndex);
-    }
-     else
-      tmp$_6 = out;
-    return tmp$_6;
+    return tmp$_5;
   };
   Processor.prototype.calculate_0 = function (actionTitle) {
     var tmp$;
@@ -311,16 +301,6 @@
       default:tmp$ = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
         break;
     }
-    return tmp$;
-  };
-  Processor.prototype.stripZeros_0 = function ($receiver) {
-    var tmp$;
-    if ($receiver.length > 1 && startsWith($receiver, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
-      var startIndex = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT.length;
-      tmp$ = $receiver.substring(startIndex);
-    }
-     else
-      tmp$ = $receiver;
     return tmp$;
   };
   Processor.$metadata$ = {
