@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 
     val instanceController = InstanceController()
 
-    app.post("/new-message") { req, res ->
+    app.post("/tg-webhook") { req, res ->
 
         asMessage(req.body.message)?.takeIf { it.text == "/start" }?.let {
 

@@ -137,7 +137,7 @@
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
     var instanceController = new InstanceController();
-    app.post('/new-message', main$lambda(instanceController, axios));
+    app.post('/tg-webhook', main$lambda(instanceController, axios));
     app.listen((tmp$ = process.env.PORT) != null ? tmp$ : 3000);
   }
   function Instance(user, chat, messageId) {

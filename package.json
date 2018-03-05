@@ -12,7 +12,7 @@
     "url": "git+https://github.com/arnis71/telegram-calculator-bot.git"
   },
   "author": "Arnis",
-  "license": "ISC",
+  "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/arnis71/telegram-calculator-bot/issues"
   },
