@@ -62,7 +62,9 @@ fun main(args: Array<String>) {
                     println("Callback posted")
                     res.end("ok")
                 }.catch { err -> res.end("Error : $err") }
-            } ?: res.end("ok")
+            }
+
+            res.end("ok")
         }
 
         res.end("ok")

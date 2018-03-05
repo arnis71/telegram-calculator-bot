@@ -114,7 +114,10 @@
           var closure$axios_1 = closure$axios;
           var tmp$_3;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          ((tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null ? closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', 'fixed text'), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res)) : null) != null || res.end('ok');
+          if ((tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null) {
+            closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', 'fixed text'), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
+          }
+          res.end('ok');
         }
       }
       return res.end('ok');
