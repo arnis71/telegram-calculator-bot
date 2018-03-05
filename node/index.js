@@ -284,9 +284,7 @@
     }
      else
       tmp$_6 = out;
-    var $receiver = tmp$_6;
-    println('debug ' + $receiver);
-    return $receiver;
+    return tmp$_6;
   };
   Processor.prototype.calculate_0 = function (actionTitle) {
     var tmp$;
