@@ -279,7 +279,7 @@
     var out = tmp$_5;
     var tmp$_6;
     if (out.length > 1 && startsWith(out, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
-      var startIndex = out.length;
+      var startIndex = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT.length;
       tmp$_6 = out.substring(startIndex);
     }
      else

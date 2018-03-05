@@ -22,7 +22,7 @@ class Processor {
             }
 
         return (if (out.length > 1 && out.startsWith(DEFAULT_INPUT))
-            out.substring(out.length)
+            out.substring(DEFAULT_INPUT.length)
         else
             out).also { println("debug $it") }
     }
