@@ -2,7 +2,6 @@ import CalculatorKeyboard.Companion.DEFAULT_INPUT
 import kotlin.js.json
 
 fun main(args: Array<String>) {
-
     val express = require("express")
     val parser = require("body-parser")
     val axios = require("axios")
@@ -12,20 +11,16 @@ fun main(args: Array<String>) {
     app.use(parser.json())
     app.use(parser.urlencoded(json("extended" to true)))
 
-    val port = process.env.PORT ?: 3000
-
     val instanceController = InstanceController()
 
     app.post("/new-message") { req, res ->
-        val body = req.body
 
-        asMessage(body.message)?.takeIf { it.text.contains("/start") }?.let {
-            println("Message ${it.text} received from: ${it.fromUser.firstName}")
+        asMessage(req.body.message)?.takeIf { it.text == "/start" }?.let {
 
             instanceController.incomingMessage(it)
 
             axios.post(
-                Api.forEndpoint("sendMessage"),
+                Api.getUrl("sendMessage"),
                 json(
                     "chat_id" to it.chat.id,
                     "text" to DEFAULT_INPUT,
@@ -35,49 +30,36 @@ fun main(args: Array<String>) {
                 val messageId = response.data.result.message_id as Int
                 val success = instanceController.setMessageIdFor(it.fromUser, messageId)
 
-                println("Message posted with id $messageId from: ${it.fromUser.firstName}")
-
-                res.end(
-                    if (success)
-                        "ok"
-                    else
-                        "error"
-                )
+                res.end(if (success) "ok" else "error")
             }.catch { err -> res.end("Error : $err") }
-        } ?: asCallbackQuery(body.callback_query)?.let {
-            println("callback received from ${it.from.firstName}, data ${it.data}, message text ${it.message.text}")
+
+        } ?: asCallbackQuery(req.body.callback_query)?.let {
 
             instanceController.incomingCallback(it)?.let { instance ->
                 val newText = instance.processor.process(it.data.removePrefix("data"))
 
                 if (newText != it.message.text) {
                     axios.post(
-                        Api.forEndpoint("editMessageText"),
+                        Api.getUrl("editMessageText"),
                         json(
                             "chat_id" to instance.chat.id,
                             "message_id" to instance.messageId,
                             "text" to newText,
                             "reply_markup" to keyboard.toJson()
                         )
-                    ).then { _ ->
-                        println("Callback posted")
-                        res.end("ok")
-                    }.catch { err -> res.end("Error : $err") }
+                    ).then { _ -> res.end("ok") }
+                    .catch { err -> res.end("Error : $err") }
                 } else {
-                    axios.post(Api.forEndpoint("answerCallbackQuery"),
+                    axios.post(
+                        Api.getUrl("answerCallbackQuery"),
                         json("callback_query_id" to it.id)
-                    ).then { _ ->
-                        println("Callback skiped")
-                        res.end("ok")
-                    }.catch { err -> res.end("Error : $err") }
+                    ).then { _ -> res.end("ok") }
+                    .catch { err -> res.end("Error : $err") }
                 }
             }
         }
-
         res.end("ok")
     }
 
-    app.listen(port) {
-        println("Telegram calculator bot listening on port $port")
-    }
+    app.listen(process.env.PORT ?: 3000)
 }

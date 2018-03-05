@@ -12,12 +12,9 @@
   var Kind_OBJECT = Kotlin.Kind.OBJECT;
   var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
   var Kind_CLASS = Kotlin.Kind.CLASS;
-  var contains = Kotlin.kotlin.text.contains_li3zpu$;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var equals = Kotlin.equals;
   var throwCCE = Kotlin.throwCCE;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
-  var equals = Kotlin.equals;
-  var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   function CalculatorKeyboard(rows, cols) {
@@ -74,7 +71,6 @@
       var tmp$;
       var messageId = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
       var success = closure$instanceController.setMessageIdFor_5pdfst$(closure$it.fromUser, messageId);
-      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName);
       return closure$res.end(success ? 'ok' : 'error');
     };
   }
@@ -85,7 +81,6 @@
   }
   function main$lambda$lambda$lambda$lambda(closure$res) {
     return function (f) {
-      println('Callback posted');
       return closure$res.end('ok');
     };
   }
@@ -96,7 +91,6 @@
   }
   function main$lambda$lambda$lambda$lambda_1(closure$res) {
     return function (f) {
-      println('Callback skiped');
       return closure$res.end('ok');
     };
   }
@@ -108,41 +102,32 @@
   function main$lambda(closure$instanceController, closure$axios) {
     return function (req, res) {
       var tmp$, tmp$_0, tmp$_1;
-      var body = req.body;
       var tmp$_2;
-      if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
+      if ((tmp$_0 = (tmp$ = asMessage(req.body.message)) != null ? equals(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$instanceController_0 = closure$instanceController;
         var closure$axios_0 = closure$axios;
-        println('Message ' + tmp$_0.text + ' received from: ' + tmp$_0.fromUser.firstName);
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
-        tmp$_2 = closure$axios_0.post(Api_getInstance().forEndpoint_61zpoe$('sendMessage'), json([to('chat_id', tmp$_0.chat.id), to('text', CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
+        tmp$_2 = closure$axios_0.post(Api_getInstance().getUrl_61zpoe$('sendMessage'), json([to('chat_id', tmp$_0.chat.id), to('text', CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
       }
        else
         tmp$_2 = null;
       if (tmp$_2 == null) {
-        if ((tmp$_1 = asCallbackQuery(body.callback_query)) != null) {
+        if ((tmp$_1 = asCallbackQuery(req.body.callback_query)) != null) {
           var closure$instanceController_1 = closure$instanceController;
           var closure$axios_1 = closure$axios;
           var tmp$_3;
-          println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
           if ((tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null) {
             var newText = tmp$_3.processor.process_61zpoe$(removePrefix(tmp$_1.data, 'data'));
             if (!equals(newText, tmp$_1.message.text)) {
-              closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', newText), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
+              closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', newText), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
             }
              else {
-              closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('answerCallbackQuery'), json([to('callback_query_id', tmp$_1.id)])).then(main$lambda$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda$lambda_2(res));
+              closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('answerCallbackQuery'), json([to('callback_query_id', tmp$_1.id)])).then(main$lambda$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda$lambda_2(res));
             }
           }
         }
       }
       return res.end('ok');
-    };
-  }
-  function main$lambda_0(closure$port) {
-    return function () {
-      println('Telegram calculator bot listening on port ' + closure$port);
-      return Unit;
     };
   }
   function main(args) {
@@ -153,10 +138,9 @@
     var app = express();
     app.use(parser.json());
     app.use(parser.urlencoded(json([to('extended', true)])));
-    var port = (tmp$ = process.env.PORT) != null ? tmp$ : 3000;
     var instanceController = new InstanceController();
     app.post('/new-message', main$lambda(instanceController, axios));
-    app.listen(port, main$lambda_0(port));
+    app.listen((tmp$ = process.env.PORT) != null ? tmp$ : 3000);
   }
   function Instance(user, chat, messageId) {
     if (messageId === void 0)
@@ -384,7 +368,7 @@
     this.BASE_URL_0 = 'https://api.telegram.org/';
     this.KEY_0 = '518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4';
   }
-  Api.prototype.forEndpoint_61zpoe$ = function (path) {
+  Api.prototype.getUrl_61zpoe$ = function (path) {
     return this.BASE_URL_0 + 'bot' + this.KEY_0 + '/' + path;
   };
   Api.$metadata$ = {
