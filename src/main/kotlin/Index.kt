@@ -53,9 +53,9 @@ fun main(args: Array<String>) {
                     json(
                         "chat_id" to instance.chat.id,
                         "message_id" to instance.messageId,
-                        "text" to instance.processor.process(it.data.removePrefix("data")).also {
+                        "text" to "fixed text"/*instance.processor.process(it.data.removePrefix("data")).also {
                             println("callback text $it")
-                        },
+                        }*/,
                         "reply_markup" to keyboard.toJson()
                     )
                 ).then { _ ->
