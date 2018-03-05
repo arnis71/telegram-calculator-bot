@@ -48,18 +48,29 @@ fun main(args: Array<String>) {
             println("callback received from ${it.from.firstName}, data ${it.data}, message text ${it.message.text}")
 
             instanceController.incomingCallback(it)?.let { instance ->
-                axios.post(
-                    Api.forEndpoint("editMessageText"),
-                    json(
-                        "chat_id" to instance.chat.id,
-                        "message_id" to instance.messageId,
-                        "text" to instance.processor.process(it.data.removePrefix("data")),
-                        "reply_markup" to keyboard.toJson()
-                    )
-                ).then { _ ->
-                    println("Callback posted")
-                    res.end("ok")
-                }.catch { err -> res.end("Error : $err") }
+                val newText = instance.processor.process(it.data.removePrefix("data"))
+
+                if (newText != it.message.text) {
+                    axios.post(
+                        Api.forEndpoint("editMessageText"),
+                        json(
+                            "chat_id" to instance.chat.id,
+                            "message_id" to instance.messageId,
+                            "text" to newText,
+                            "reply_markup" to keyboard.toJson()
+                        )
+                    ).then { _ ->
+                        println("Callback posted")
+                        res.end("ok")
+                    }.catch { err -> res.end("Error : $err") }
+                } else {
+                    axios.post(Api.forEndpoint("answerCallbackQuery"),
+                        json("callback_query_id" to it.id)
+                    ).then { _ ->
+                        println("Callback skiped")
+                        res.end("ok")
+                    }.catch { err -> res.end("Error : $err") }
+                }
             }
         }
 
