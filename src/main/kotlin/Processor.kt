@@ -1,5 +1,3 @@
-import CalculatorKeyboard.Companion.DEFAULT_INPUT
-
 class Processor {
     private var firstValue = ""
     private var secondValue = ""
@@ -8,6 +6,7 @@ class Processor {
     fun process(input: String) : String {
         action?.let {
             secondValue += input
+            return secondValue
         } ?: CalculatorAction.values().find { it.title == input }
             ?.let {
                 action = it
@@ -15,9 +14,8 @@ class Processor {
             }
         ?: kotlin.run {
             firstValue += input
+            return firstValue
         }
-
-        return input
     }
 
     private fun calculate() = requireNotNull(action).calculate(firstValue, secondValue)

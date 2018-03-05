@@ -309,7 +309,7 @@
     var tmp$_1;
     if (this.action_0 != null) {
       this.secondValue_0 += input;
-      tmp$_1 = Unit;
+      return this.secondValue_0;
     }
      else
       tmp$_1 = null;
@@ -342,8 +342,8 @@
     }
     if (tmp$_2 == null) {
       this.firstValue_0 += input;
+      return this.firstValue_0;
     }
-    return input;
   };
   var IllegalArgumentException_init = Kotlin.kotlin.IllegalArgumentException_init_pdl1vj$;
   Processor.prototype.calculate_0 = function () {
