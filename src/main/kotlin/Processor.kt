@@ -21,13 +21,15 @@ class Processor {
             firstValue
             }
 
+        println("input $input output $out")
+
         return if (out.length > 1 && out.startsWith(DEFAULT_INPUT))
             out.substring(DEFAULT_INPUT.length)
         else
             out
     }
 
-    private fun calculate(actionTitle: String): String {
+    private fun calculate(actionTitle: String) : String {
         return when (actionTitle) {
             RESET -> DEFAULT_INPUT.also {
                 firstValue = it
@@ -43,5 +45,12 @@ class Processor {
             }
             else -> DEFAULT_INPUT
         }
+    }
+
+    private fun String.stripZeros() : String {
+        return if (length > 1 && startsWith(DEFAULT_INPUT))
+            substring(DEFAULT_INPUT.length)
+        else
+            this
     }
 }

@@ -277,6 +277,7 @@
       tmp$_5 = this.firstValue_0;
     }
     var out = tmp$_5;
+    println('input ' + input + ' output ' + out);
     var tmp$_6;
     if (out.length > 1 && startsWith(out, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
       var startIndex = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT.length;
@@ -310,6 +311,16 @@
       default:tmp$ = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
         break;
     }
+    return tmp$;
+  };
+  Processor.prototype.stripZeros_0 = function ($receiver) {
+    var tmp$;
+    if ($receiver.length > 1 && startsWith($receiver, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
+      var startIndex = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT.length;
+      tmp$ = $receiver.substring(startIndex);
+    }
+     else
+      tmp$ = $receiver;
     return tmp$;
   };
   Processor.$metadata$ = {
