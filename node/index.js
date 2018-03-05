@@ -12,12 +12,12 @@
   var Kind_OBJECT = Kotlin.Kind.OBJECT;
   var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
   var Kind_CLASS = Kotlin.Kind.CLASS;
+  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var equals = Kotlin.equals;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   var Enum = Kotlin.kotlin.Enum;
   var throwISE = Kotlin.throwISE;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
@@ -94,6 +94,7 @@
   }
   CalculatorAction.prototype.calculate_puj7f4$ = function (firstValue, secondValue) {
     var tmp$, tmp$_0;
+    println('calculating ' + firstValue + ' ' + this.title + ' ' + secondValue);
     tmp$ = this.title;
     if (equals(tmp$, CalculatorAction$RESET_getInstance().title))
       tmp$_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
@@ -300,8 +301,8 @@
     interfaces: []
   };
   function Processor() {
-    this.firstValue_0 = '';
-    this.secondValue_0 = '';
+    this.firstValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+    this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
     this.action_0 = null;
   }
   Processor.prototype.process_61zpoe$ = function (input) {

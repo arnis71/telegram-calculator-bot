@@ -35,6 +35,7 @@ enum class CalculatorAction(val title: String) {
     SUB("-");
 
     fun calculate(firstValue: String, secondValue: String): String {
+        println("calculating $firstValue $title $secondValue")
         return when (title) {
             RESET.title -> CalculatorKeyboard.DEFAULT_INPUT
             ADD.title -> (firstValue.toInt() + secondValue.toInt()).toString()
