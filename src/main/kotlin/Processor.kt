@@ -27,6 +27,7 @@ class Processor {
             RESET -> DEFAULT_INPUT.also {
                 firstValue = it
                 secondValue = it
+                action = null
             }
             ADD -> (firstValue.toInt() + secondValue.toInt()).toString().also {
                 firstValue = it

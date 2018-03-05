@@ -303,6 +303,7 @@
         var $receiver = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
         this.firstValue_0 = $receiver;
         this.secondValue_0 = $receiver;
+        this.action_0 = null;
         tmp$ = $receiver;
         break;
       case '+':
