@@ -15,10 +15,10 @@
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
+  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var equals = Kotlin.equals;
-  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   function CalculatorKeyboard(rows, cols) {
     CalculatorKeyboard$Companion_getInstance();
@@ -114,10 +114,7 @@
           var closure$axios_1 = closure$axios;
           var tmp$_3;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          if ((tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null) {
-            closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', 'fixed text'), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
-          }
-          res.end('ok');
+          (tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null && closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', tmp$_3.processor.process_61zpoe$(removePrefix(tmp$_1.data, 'data'))), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
         }
       }
       return res.end('ok');
