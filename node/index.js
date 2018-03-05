@@ -12,17 +12,17 @@
   var Kind_OBJECT = Kotlin.Kind.OBJECT;
   var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
   var Kind_CLASS = Kotlin.Kind.CLASS;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
-  var equals = Kotlin.equals;
-  var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   var Enum = Kotlin.kotlin.Enum;
   var throwISE = Kotlin.throwISE;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
+  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
   var ensureNotNull = Kotlin.ensureNotNull;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
+  var equals = Kotlin.equals;
+  var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   CalculatorAction.prototype = Object.create(Enum.prototype);
   CalculatorAction.prototype.constructor = CalculatorAction;
   function CalculatorKeyboard(rows, cols) {
@@ -92,20 +92,6 @@
     CalculatorAction_initFields();
     return CalculatorAction$SUB_instance;
   }
-  CalculatorAction.prototype.calculate_puj7f4$ = function (firstValue, secondValue) {
-    var tmp$, tmp$_0;
-    println('calculating ' + firstValue + ' ' + this.title + ' ' + secondValue);
-    tmp$ = this.title;
-    if (equals(tmp$, CalculatorAction$RESET_getInstance().title))
-      tmp$_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
-    else if (equals(tmp$, CalculatorAction$ADD_getInstance().title))
-      tmp$_0 = (toInt(firstValue) + toInt(secondValue) | 0).toString();
-    else if (equals(tmp$, CalculatorAction$SUB_getInstance().title))
-      tmp$_0 = (toInt(firstValue) - toInt(secondValue) | 0).toString();
-    else
-      tmp$_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
-    return tmp$_0;
-  };
   CalculatorAction.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'CalculatorAction',
@@ -325,7 +311,7 @@
      while (false);
     if ((tmp$ = firstOrNull$result) != null) {
       this.action_0 = tmp$;
-      return this.calculate_0();
+      return this.calculate_61zpoe$(tmp$.title);
     }
      else
       tmp$_1 = null;
@@ -347,18 +333,30 @@
       return removePrefix(this.firstValue_0, '0');
     }
   };
-  var IllegalArgumentException_init = Kotlin.kotlin.IllegalArgumentException_init_pdl1vj$;
-  Processor.prototype.calculate_0 = function () {
-    var value = this.action_0;
-    var requireNotNull$result;
-    if (value == null) {
-      var message = 'Required value was null.';
-      throw IllegalArgumentException_init(message.toString());
+  Processor.prototype.calculate_61zpoe$ = function (actionTitle) {
+    var tmp$;
+    println('calculating ' + this.firstValue_0 + ' ' + actionTitle + ' ' + this.secondValue_0);
+    if (equals(actionTitle, CalculatorAction$RESET_getInstance().title)) {
+      var $receiver = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+      this.firstValue_0 = $receiver;
+      this.secondValue_0 = $receiver;
+      tmp$ = $receiver;
     }
-     else {
-      requireNotNull$result = value;
+     else if (equals(actionTitle, CalculatorAction$ADD_getInstance().title)) {
+      var $receiver_0 = (toInt(this.firstValue_0) + toInt(this.secondValue_0) | 0).toString();
+      this.firstValue_0 = $receiver_0;
+      this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+      tmp$ = $receiver_0;
     }
-    return requireNotNull$result.calculate_puj7f4$(this.firstValue_0, this.secondValue_0);
+     else if (equals(actionTitle, CalculatorAction$SUB_getInstance().title)) {
+      var $receiver_1 = (toInt(this.firstValue_0) - toInt(this.secondValue_0) | 0).toString();
+      this.firstValue_0 = $receiver_1;
+      this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+      tmp$ = $receiver_1;
+    }
+     else
+      tmp$ = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+    return tmp$;
   };
   Processor.$metadata$ = {
     kind: Kind_CLASS,
