@@ -14,8 +14,8 @@
   var Kind_CLASS = Kotlin.Kind.CLASS;
   var equals = Kotlin.equals;
   var throwCCE = Kotlin.throwCCE;
-  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
+  var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   function CalculatorKeyboard(rows, cols) {
     CalculatorKeyboard$Companion_getInstance();
@@ -31,7 +31,7 @@
     return it === -1 ? '' : it.toString();
   }
   function CalculatorKeyboard$toJson$lambda_0(it) {
-    return json([to('text', it), to('callback_data', 'data' + it)]);
+    return json([to('text', it), to('callback_data', CallbackQuery$Companion_getInstance().PREFIX + it)]);
   }
   CalculatorKeyboard.prototype.toJson = function () {
     return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf([CalculatorKeyboard$Companion_getInstance().RESET, CalculatorKeyboard$Companion_getInstance().ADD, CalculatorKeyboard$Companion_getInstance().SUB])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
@@ -89,12 +89,12 @@
       return closure$res.end('Error : ' + err);
     };
   }
-  function main$lambda$lambda$lambda$lambda_1(closure$res) {
+  function main$lambda$lambda$lambda_1(closure$res) {
     return function (f) {
       return closure$res.end('ok');
     };
   }
-  function main$lambda$lambda$lambda$lambda_2(closure$res) {
+  function main$lambda$lambda$lambda_2(closure$res) {
     return function (err) {
       return closure$res.end('Error : ' + err);
     };
@@ -117,14 +117,12 @@
           var closure$axios_1 = closure$axios;
           var tmp$_3;
           if ((tmp$_3 = closure$instanceController_1.incomingCallback_y5sqzh$(tmp$_1)) != null) {
-            var newText = tmp$_3.processor.process_61zpoe$(removePrefix(tmp$_1.data, 'data'));
+            var newText = tmp$_3.processor.process_61zpoe$(tmp$_1.data);
             if (!equals(newText, tmp$_1.message.text)) {
-              closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', newText), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
-            }
-             else {
-              closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('answerCallbackQuery'), json([to('callback_query_id', tmp$_1.id)])).then(main$lambda$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda$lambda_2(res));
+              return closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('editMessageText'), json([to('chat_id', tmp$_3.chat.id), to('message_id', tmp$_3.messageId), to('text', newText), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
             }
           }
+          closure$axios_1.post(Api_getInstance().getUrl_61zpoe$('answerCallbackQuery'), json([to('callback_query_id', tmp$_1.id)])).then(main$lambda$lambda$lambda_1(res)).catch(main$lambda$lambda$lambda_2(res));
         }
       }
       return res.end('ok');
@@ -321,11 +319,33 @@
     return $receiver.id !== -1 ? $receiver : null;
   }
   function CallbackQuery(data) {
+    CallbackQuery$Companion_getInstance();
     var tmp$, tmp$_0, tmp$_1, tmp$_2;
     this.id = (tmp$_0 = typeof (tmp$ = data != null ? data.id : null) === 'string' ? tmp$ : null) != null ? tmp$_0 : '';
     this.from = new User(data != null ? data.from : null);
     this.message = new Message(data != null ? data.message : null);
-    this.data = (tmp$_2 = typeof (tmp$_1 = data != null ? data.data : null) === 'string' ? tmp$_1 : null) != null ? tmp$_2 : '';
+    this.data_fr5w1n$_0 = (tmp$_2 = typeof (tmp$_1 = data != null ? data.data : null) === 'string' ? tmp$_1 : null) != null ? tmp$_2 : '';
+  }
+  Object.defineProperty(CallbackQuery.prototype, 'data', {
+    get: function () {
+      return removePrefix(this.data_fr5w1n$_0, CallbackQuery$Companion_getInstance().PREFIX);
+    }
+  });
+  function CallbackQuery$Companion() {
+    CallbackQuery$Companion_instance = this;
+    this.PREFIX = 'data';
+  }
+  CallbackQuery$Companion.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'Companion',
+    interfaces: []
+  };
+  var CallbackQuery$Companion_instance = null;
+  function CallbackQuery$Companion_getInstance() {
+    if (CallbackQuery$Companion_instance === null) {
+      new CallbackQuery$Companion();
+    }
+    return CallbackQuery$Companion_instance;
   }
   CallbackQuery.$metadata$ = {
     kind: Kind_CLASS,
@@ -396,6 +416,9 @@
   _.Processor = Processor;
   _.asCallbackQuery_za3rmp$ = asCallbackQuery;
   _.asMessage_za3rmp$ = asMessage;
+  Object.defineProperty(CallbackQuery, 'Companion', {
+    get: CallbackQuery$Companion_getInstance
+  });
   _.CallbackQuery = CallbackQuery;
   _.Message = Message;
   _.User = User;

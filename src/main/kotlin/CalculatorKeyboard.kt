@@ -13,7 +13,7 @@ class CalculatorKeyboard(private val rows: Int = 5, private val cols: Int = 3) {
             }
             .plus(sequenceOf(RESET, ADD, SUB))
             .map {
-                json("text" to it, "callback_data" to "data$it")
+                json("text" to it, "callback_data" to CallbackQuery.PREFIX + it)
             }
             .chunked(cols)
             .toList()

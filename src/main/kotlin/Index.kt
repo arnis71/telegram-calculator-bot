@@ -36,10 +36,10 @@ fun main(args: Array<String>) {
         } ?: asCallbackQuery(req.body.callback_query)?.let {
 
             instanceController.incomingCallback(it)?.let { instance ->
-                val newText = instance.processor.process(it.data.removePrefix("data"))
+                val newText = instance.processor.process(it.data)
 
                 if (newText != it.message.text) {
-                    axios.post(
+                    return@post axios.post(
                         Api.getUrl("editMessageText"),
                         json(
                             "chat_id" to instance.chat.id,
@@ -49,14 +49,12 @@ fun main(args: Array<String>) {
                         )
                     ).then { _ -> res.end("ok") }
                     .catch { err -> res.end("Error : $err") }
-                } else {
-                    axios.post(
-                        Api.getUrl("answerCallbackQuery"),
-                        json("callback_query_id" to it.id)
-                    ).then { _ -> res.end("ok") }
-                    .catch { err -> res.end("Error : $err") }
                 }
             }
+
+            axios.post(Api.getUrl("answerCallbackQuery"), json("callback_query_id" to it.id))
+                .then { _ -> res.end("ok") }
+                .catch { err -> res.end("Error : $err") }
         }
         res.end("ok")
     }

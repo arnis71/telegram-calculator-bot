@@ -9,6 +9,11 @@ class CallbackQuery(data: dynamic) {
     val from = User(data?.from)
     val message = Message(data?.message)
     val data: String = data?.data as? String ?: ""
+        get() = field.removePrefix(PREFIX)
+
+    companion object {
+        const val PREFIX = "data"
+    }
 }
 
 class Message(data: dynamic) {
