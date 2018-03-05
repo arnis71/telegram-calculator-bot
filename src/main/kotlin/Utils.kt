@@ -26,3 +26,10 @@ class User(data: dynamic) {
 class Chat(data: dynamic) {
     val id: Int = data?.id as? Int ?: -1
 }
+
+object Api {
+    private const val BASE_URL = "https://api.telegram.org/"
+    private const val KEY = "bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4"
+
+    fun forEndpoint(path: String) = "${BASE_URL}bot$KEY/$path"
+}

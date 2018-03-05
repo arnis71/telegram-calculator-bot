@@ -17,13 +17,16 @@
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   var removeAll = Kotlin.kotlin.collections.removeAll_qafx1e$;
-  var ensureNotNull = Kotlin.ensureNotNull;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var equals = Kotlin.equals;
   var startsWith = Kotlin.kotlin.text.startsWith_7epoxm$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   function CalculatorKeyboard(rows, cols) {
     CalculatorKeyboard$Companion_getInstance();
+    if (rows === void 0)
+      rows = 5;
+    if (cols === void 0)
+      cols = 3;
     this.rows_0 = rows;
     this.cols_0 = cols;
     this.numbers_0 = generateSequence(1, CalculatorKeyboard$numbers$lambda);
@@ -64,18 +67,20 @@
     simpleName: 'CalculatorKeyboard',
     interfaces: []
   };
-  function main$lambda$lambda$lambda(closure$instanceController, this$, closure$res) {
+  function get_keyboard() {
+    return new CalculatorKeyboard();
+  }
+  function main$lambda$lambda$lambda(closure$instanceController, closure$it, closure$res) {
     return function (response) {
       var tmp$;
       var messageId = typeof (tmp$ = response.data.result.message_id) === 'number' ? tmp$ : throwCCE();
-      closure$instanceController.setMessageIdFor_5pdfst$(this$.fromUser, messageId);
-      println('Message posted with id ' + messageId + ', from user ' + this$.fromUser.firstName);
-      return closure$res.end('ok');
+      var success = closure$instanceController.setMessageIdFor_5pdfst$(closure$it.fromUser, messageId);
+      println('Message posted with id ' + messageId + ' from: ' + closure$it.fromUser.firstName);
+      return closure$res.end(success ? 'ok' : 'error');
     };
   }
   function main$lambda$lambda$lambda_0(closure$res) {
     return function (err) {
-      println('Error : ' + err);
       return closure$res.end('Error : ' + err);
     };
   }
@@ -87,7 +92,6 @@
   }
   function main$lambda$lambda$lambda$lambda_0(closure$res) {
     return function (err) {
-      println('Error : ' + err);
       return closure$res.end('Error : ' + err);
     };
   }
@@ -99,11 +103,9 @@
       if ((tmp$_0 = (tmp$ = asMessage(body.message)) != null ? contains(tmp$.text, '/start') ? tmp$ : null : null) != null) {
         var closure$instanceController_0 = closure$instanceController;
         var closure$axios_0 = closure$axios;
-        println('message received from: ' + tmp$_0.fromUser.firstName + ', text: ' + tmp$_0.text + ', chatId: ' + tmp$_0.chat.id);
+        println('Message ' + tmp$_0.text + ' received from: ' + tmp$_0.fromUser.firstName);
         closure$instanceController_0.incomingMessage_rphee1$(tmp$_0);
-        closure$axios_0.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage', json([to('chat_id', tmp$_0.chat.id), to('text', CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
-        '';
-        tmp$_2 = tmp$_0;
+        tmp$_2 = closure$axios_0.post(Api_getInstance().forEndpoint_61zpoe$('sendMessage'), json([to('chat_id', tmp$_0.chat.id), to('text', CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT), to('reply_markup', get_keyboard().toJson())])).then(main$lambda$lambda$lambda(closure$instanceController_0, tmp$_0, res)).catch(main$lambda$lambda$lambda_0(res));
       }
        else
         tmp$_2 = null;
@@ -113,9 +115,7 @@
           var closure$axios_1 = closure$axios;
           var tmp$_3;
           println('callback received from ' + tmp$_1.from.firstName + ', data ' + tmp$_1.data + ', message text ' + tmp$_1.message.text);
-          if ((tmp$_3 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null) {
-            closure$axios_1.post('https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText', tmp$_3).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
-          }
+          (tmp$_3 = closure$instanceController_1.requestFromCallback_y5sqzh$(tmp$_1)) != null && closure$axios_1.post(Api_getInstance().forEndpoint_61zpoe$('editMessageText'), tmp$_3).then(main$lambda$lambda$lambda$lambda(res)).catch(main$lambda$lambda$lambda$lambda_0(res));
         }
       }
       return res.end('ok');
@@ -123,7 +123,7 @@
   }
   function main$lambda_0(closure$port) {
     return function () {
-      println('Telegram app listening on port ' + closure$port);
+      println('Telegram calculator bot listening on port ' + closure$port);
       return Unit;
     };
   }
@@ -192,14 +192,14 @@
     this.instances_0.add_11rb$(new Instance(message.fromUser, message.chat));
   };
   InstanceController.prototype.requestFromCallback_y5sqzh$ = function (callbackQuery) {
-    var tmp$;
+    var tmp$, tmp$_0;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$_0;
-      tmp$_0 = $receiver.iterator();
-      while (tmp$_0.hasNext()) {
-        var element = tmp$_0.next();
+      var tmp$_1;
+      tmp$_1 = $receiver.iterator();
+      while (tmp$_1.hasNext()) {
+        var element = tmp$_1.next();
         if (element.user.id === callbackQuery.from.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
@@ -208,17 +208,18 @@
       firstOrNull$result = null;
     }
      while (false);
-    var $receiver_0 = ensureNotNull(firstOrNull$result);
-    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', tmp$.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
+    return (tmp$_0 = (tmp$ = firstOrNull$result) != null ? tmp$.messageId === callbackQuery.message.id ? tmp$ : null : null) != null ? json([to('chat_id', tmp$_0.chat.id), to('message_id', tmp$_0.messageId), to('text', tmp$_0.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', get_keyboard().toJson())]) : null;
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
+    var tmp$, tmp$_0;
+    var tmp$_1;
     var $receiver = this.instances_0;
     var firstOrNull$result;
     firstOrNull$break: do {
-      var tmp$;
-      tmp$ = $receiver.iterator();
-      while (tmp$.hasNext()) {
-        var element = tmp$.next();
+      var tmp$_2;
+      tmp$_2 = $receiver.iterator();
+      while (tmp$_2.hasNext()) {
+        var element = tmp$_2.next();
         if (element.user.id === user.id) {
           firstOrNull$result = element;
           break firstOrNull$break;
@@ -227,7 +228,13 @@
       firstOrNull$result = null;
     }
      while (false);
-    ensureNotNull(firstOrNull$result).messageId = messageId;
+    if ((tmp$ = firstOrNull$result) != null) {
+      tmp$.messageId = messageId;
+      tmp$_1 = true;
+    }
+     else
+      tmp$_1 = null;
+    return (tmp$_0 = tmp$_1) != null ? tmp$_0 : false;
   };
   InstanceController.$metadata$ = {
     kind: Kind_CLASS,
@@ -281,7 +288,6 @@
   };
   Processor.prototype.calculate_0 = function (actionTitle) {
     var tmp$;
-    println('calculating ' + this.firstValue_0 + ' ' + actionTitle + ' ' + this.secondValue_0);
     switch (actionTitle) {
       case 'AC':
         var $receiver = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
@@ -362,10 +368,33 @@
     simpleName: 'Chat',
     interfaces: []
   };
+  function Api() {
+    Api_instance = this;
+    this.BASE_URL_0 = 'https://api.telegram.org/';
+    this.KEY_0 = 'bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4';
+  }
+  Api.prototype.forEndpoint_61zpoe$ = function (path) {
+    return this.BASE_URL_0 + 'bot' + this.KEY_0 + '/' + path;
+  };
+  Api.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'Api',
+    interfaces: []
+  };
+  var Api_instance = null;
+  function Api_getInstance() {
+    if (Api_instance === null) {
+      new Api();
+    }
+    return Api_instance;
+  }
   Object.defineProperty(CalculatorKeyboard, 'Companion', {
     get: CalculatorKeyboard$Companion_getInstance
   });
   _.CalculatorKeyboard = CalculatorKeyboard;
+  Object.defineProperty(_, 'keyboard', {
+    get: get_keyboard
+  });
   _.main_kand9s$ = main;
   _.Instance = Instance;
   _.InstanceController = InstanceController;
@@ -376,6 +405,9 @@
   _.Message = Message;
   _.User = User;
   _.Chat = Chat;
+  Object.defineProperty(_, 'Api', {
+    get: Api_getInstance
+  });
   main([]);
   Kotlin.defineModule('index', _);
   return _;

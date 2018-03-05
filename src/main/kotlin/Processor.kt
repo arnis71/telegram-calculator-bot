@@ -28,7 +28,6 @@ class Processor {
     }
 
     private fun calculate(actionTitle: String): String {
-        println("calculating $firstValue $actionTitle $secondValue")
         return when (actionTitle) {
             RESET -> DEFAULT_INPUT.also {
                 firstValue = it

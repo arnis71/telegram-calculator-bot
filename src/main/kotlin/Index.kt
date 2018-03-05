@@ -19,45 +19,42 @@ fun main(args: Array<String>) {
     app.post("/new-message") { req, res ->
         val body = req.body
 
-        asMessage(body.message)?.takeIf { it.text.contains("/start") }?.apply {
-            println("message received from: ${fromUser.firstName}, text: $text, chatId: ${chat.id}")
+        asMessage(body.message)?.takeIf { it.text.contains("/start") }?.let {
+            println("Message ${it.text} received from: ${it.fromUser.firstName}")
 
-            instanceController.incomingMessage(this)
+            instanceController.incomingMessage(it)
 
             axios.post(
-                "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/sendMessage",
+                Api.forEndpoint("sendMessage"),
                 json(
-                    "chat_id" to chat.id,
+                    "chat_id" to it.chat.id,
                     "text" to DEFAULT_INPUT,
-                    "reply_markup" to CalculatorKeyboard(5,3).toJson()
+                    "reply_markup" to keyboard.toJson()
                 )
             ).then { response ->
                 val messageId = response.data.result.message_id as Int
-                instanceController.setMessageIdFor(fromUser, messageId)
+                val success = instanceController.setMessageIdFor(it.fromUser, messageId)
 
-                println("Message posted with id $messageId, from user ${fromUser.firstName}")
-                res.end("ok")
-            }.catch { err ->
-                println("Error : $err")
-                res.end("Error : $err")
-            }
+                println("Message posted with id $messageId from: ${it.fromUser.firstName}")
 
-            ""
-        } ?: asCallbackQuery(body.callback_query)?.apply {
-            println("callback received from ${from.firstName}, data $data, message text ${message.text}")
+                res.end(
+                    if (success)
+                        "ok"
+                    else
+                        "error"
+                )
+            }.catch { err -> res.end("Error : $err") }
+        } ?: asCallbackQuery(body.callback_query)?.let {
+            println("callback received from ${it.from.firstName}, data ${it.data}, message text ${it.message.text}")
 
-            instanceController.requestFromCallback(this)?.let {
+            instanceController.requestFromCallback(it)?.let { json ->
                 axios.post(
-                    "https://api.telegram.org/bot518559990:AAHp7scR3FUcXYLit3cH8I6YEC3KpNrqfc4/editMessageText",
-                    it
+                    Api.forEndpoint("editMessageText"),
+                    json
                 ).then { _ ->
                     println("Callback posted")
                     res.end("ok")
-                }.catch { err ->
-                    println("Error : $err")
-                    res.end("Error : $err")
-                }
-            ""
+                }.catch { err -> res.end("Error : $err") }
             }
         }
 
@@ -65,6 +62,6 @@ fun main(args: Array<String>) {
     }
 
     app.listen(port) {
-        println("Telegram app listening on port $port")
+        println("Telegram calculator bot listening on port $port")
     }
 }

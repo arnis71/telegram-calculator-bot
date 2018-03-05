@@ -1,6 +1,6 @@
 import kotlin.js.json
 
-class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
+class CalculatorKeyboard(private val rows: Int = 5, private val cols: Int = 3) {
     private val numbers = generateSequence(1) {
         it + 1
     }
@@ -31,3 +31,6 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
         const val SUB = "-"
     }
 }
+
+val keyboard: CalculatorKeyboard
+    get() = CalculatorKeyboard()

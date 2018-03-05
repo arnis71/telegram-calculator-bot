@@ -14,17 +14,20 @@ class InstanceController {
     }
 
     fun requestFromCallback(callbackQuery: CallbackQuery): Json? {
-        return instances.find { it.user.id == callbackQuery.from.id }!!.takeIf { it.messageId == callbackQuery.message.id }?.let {
+        return instances.find { it.user.id == callbackQuery.from.id }?.takeIf { it.messageId == callbackQuery.message.id }?.let {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
                 "text" to it.processor.process(callbackQuery.data.removePrefix("data")),
-                "reply_markup" to CalculatorKeyboard(5,3).toJson()
+                "reply_markup" to keyboard.toJson()
             )
         }
     }
 
-    fun setMessageIdFor(user: User, messageId: Int) {
-        instances.find { it.user.id == user.id }!!.messageId = messageId
+    fun setMessageIdFor(user: User, messageId: Int): Boolean {
+        return instances.find { it.user.id == user.id }?.let {
+            it.messageId = messageId
+            true
+        } ?: false
     }
 }
