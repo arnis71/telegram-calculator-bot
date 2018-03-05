@@ -1,39 +1,44 @@
+import CalculatorKeyboard.Companion.ADD
 import CalculatorKeyboard.Companion.DEFAULT_INPUT
+import CalculatorKeyboard.Companion.RESET
+import CalculatorKeyboard.Companion.SUB
 
 class Processor {
     private var firstValue = DEFAULT_INPUT
     private var secondValue = DEFAULT_INPUT
-    private var action: CalculatorAction? = null
+    private var action: String? = null
 
     fun process(input: String) : String {
-        CalculatorAction.values().find { it.title == input }
+        val out =  input.takeIf { it == ADD || it == SUB || it == RESET }
             ?.let {
                 action = it
-                return calculate(it.title)
+                calculate(it)
+            } ?: action?.let {
+                secondValue += input
+            secondValue
+            } ?: run {
+                firstValue += input
+            firstValue
             }
-        ?: action?.let {
-            secondValue += input
-            return secondValue.removePrefix("0")
-        } ?: run {
-            firstValue += input
-            return firstValue.removePrefix("0")
-        }
+
+        return if (out.length > 1 && out.startsWith(DEFAULT_INPUT))
+            out.substring(out.length)
+        else
+            out
     }
 
-    fun calculate(actionTitle: String): String {
+    private fun calculate(actionTitle: String): String {
         println("calculating $firstValue $actionTitle $secondValue")
         return when (actionTitle) {
-            CalculatorAction.RESET.title -> {
-                DEFAULT_INPUT.also {
-                    firstValue = it
-                    secondValue = it
-                }
+            RESET -> DEFAULT_INPUT.also {
+                firstValue = it
+                secondValue = it
             }
-            CalculatorAction.ADD.title -> (firstValue.toInt() + secondValue.toInt()).toString().also {
+            ADD -> (firstValue.toInt() + secondValue.toInt()).toString().also {
                 firstValue = it
                 secondValue = DEFAULT_INPUT
             }
-            CalculatorAction.SUB.title -> (firstValue.toInt() - secondValue.toInt()).toString().also {
+            SUB -> (firstValue.toInt() - secondValue.toInt()).toString().also {
                 firstValue = it
                 secondValue = DEFAULT_INPUT
             }

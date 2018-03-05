@@ -12,8 +12,6 @@
   var Kind_OBJECT = Kotlin.Kind.OBJECT;
   var generateSequence = Kotlin.kotlin.sequences.generateSequence_gexuht$;
   var Kind_CLASS = Kotlin.Kind.CLASS;
-  var Enum = Kotlin.kotlin.Enum;
-  var throwISE = Kotlin.throwISE;
   var contains = Kotlin.kotlin.text.contains_li3zpu$;
   var println = Kotlin.kotlin.io.println_s8jyv4$;
   var throwCCE = Kotlin.throwCCE;
@@ -22,9 +20,8 @@
   var ensureNotNull = Kotlin.ensureNotNull;
   var removePrefix = Kotlin.kotlin.text.removePrefix_gsj5wt$;
   var equals = Kotlin.equals;
+  var startsWith = Kotlin.kotlin.text.startsWith_7epoxm$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
-  CalculatorAction.prototype = Object.create(Enum.prototype);
-  CalculatorAction.prototype.constructor = CalculatorAction;
   function CalculatorKeyboard(rows, cols) {
     CalculatorKeyboard$Companion_getInstance();
     this.rows_0 = rows;
@@ -38,11 +35,14 @@
     return json([to('text', it), to('callback_data', 'data' + it)]);
   }
   CalculatorKeyboard.prototype.toJson = function () {
-    return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf([CalculatorAction$RESET_getInstance().title, CalculatorAction$ADD_getInstance().title, CalculatorAction$SUB_getInstance().title])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
+    return json([to('inline_keyboard', reversed(toList(chunked(map(plus(map(plus(sequenceOf([-1, 0, -1]), take(this.numbers_0, Kotlin.imul(this.rows_0 - 2 | 0, this.cols_0))), CalculatorKeyboard$toJson$lambda), sequenceOf([CalculatorKeyboard$Companion_getInstance().RESET, CalculatorKeyboard$Companion_getInstance().ADD, CalculatorKeyboard$Companion_getInstance().SUB])), CalculatorKeyboard$toJson$lambda_0), this.cols_0))))]);
   };
   function CalculatorKeyboard$Companion() {
     CalculatorKeyboard$Companion_instance = this;
     this.DEFAULT_INPUT = '0';
+    this.RESET = 'AC';
+    this.ADD = '+';
+    this.SUB = '-';
   }
   CalculatorKeyboard$Companion.$metadata$ = {
     kind: Kind_OBJECT,
@@ -64,55 +64,6 @@
     simpleName: 'CalculatorKeyboard',
     interfaces: []
   };
-  function CalculatorAction(name, ordinal, title) {
-    Enum.call(this);
-    this.title = title;
-    this.name$ = name;
-    this.ordinal$ = ordinal;
-  }
-  function CalculatorAction_initFields() {
-    CalculatorAction_initFields = function () {
-    };
-    CalculatorAction$RESET_instance = new CalculatorAction('RESET', 0, 'AC');
-    CalculatorAction$ADD_instance = new CalculatorAction('ADD', 1, '+');
-    CalculatorAction$SUB_instance = new CalculatorAction('SUB', 2, '-');
-  }
-  var CalculatorAction$RESET_instance;
-  function CalculatorAction$RESET_getInstance() {
-    CalculatorAction_initFields();
-    return CalculatorAction$RESET_instance;
-  }
-  var CalculatorAction$ADD_instance;
-  function CalculatorAction$ADD_getInstance() {
-    CalculatorAction_initFields();
-    return CalculatorAction$ADD_instance;
-  }
-  var CalculatorAction$SUB_instance;
-  function CalculatorAction$SUB_getInstance() {
-    CalculatorAction_initFields();
-    return CalculatorAction$SUB_instance;
-  }
-  CalculatorAction.$metadata$ = {
-    kind: Kind_CLASS,
-    simpleName: 'CalculatorAction',
-    interfaces: [Enum]
-  };
-  function CalculatorAction$values() {
-    return [CalculatorAction$RESET_getInstance(), CalculatorAction$ADD_getInstance(), CalculatorAction$SUB_getInstance()];
-  }
-  CalculatorAction.values = CalculatorAction$values;
-  function CalculatorAction$valueOf(name) {
-    switch (name) {
-      case 'RESET':
-        return CalculatorAction$RESET_getInstance();
-      case 'ADD':
-        return CalculatorAction$ADD_getInstance();
-      case 'SUB':
-        return CalculatorAction$SUB_getInstance();
-      default:throwISE('No enum constant CalculatorAction.' + name);
-    }
-  }
-  CalculatorAction.valueOf_61zpoe$ = CalculatorAction$valueOf;
   function main$lambda$lambda$lambda(closure$instanceController, this$, closure$res) {
     return function (response) {
       var tmp$;
@@ -195,11 +146,8 @@
     this.user = user;
     this.chat = chat;
     this.messageId = messageId;
-    this.processor_0 = new Processor();
+    this.processor = new Processor();
   }
-  Instance.prototype.process_61zpoe$ = function (input) {
-    return this.processor_0.process_61zpoe$(input);
-  };
   Instance.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Instance',
@@ -261,7 +209,7 @@
     }
      while (false);
     var $receiver_0 = ensureNotNull(firstOrNull$result);
-    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', tmp$.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
+    return (tmp$ = $receiver_0.messageId === callbackQuery.message.id ? $receiver_0 : null) != null ? json([to('chat_id', tmp$.chat.id), to('message_id', tmp$.messageId), to('text', tmp$.processor.process_61zpoe$(removePrefix(callbackQuery.data, 'data'))), to('reply_markup', (new CalculatorKeyboard(5, 3)).toJson())]) : null;
   };
   InstanceController.prototype.setMessageIdFor_5pdfst$ = function (user, messageId) {
     var $receiver = this.instances_0;
@@ -293,69 +241,69 @@
   }
   Processor.prototype.process_61zpoe$ = function (input) {
     var tmp$;
-    var tmp$_0;
-    var tmp$_1;
-    var $receiver = CalculatorAction$values();
-    var firstOrNull$result;
-    firstOrNull$break: do {
-      var tmp$_2;
-      for (tmp$_2 = 0; tmp$_2 !== $receiver.length; ++tmp$_2) {
-        var element = $receiver[tmp$_2];
-        if (equals(element.title, input)) {
-          firstOrNull$result = element;
-          break firstOrNull$break;
-        }
-      }
-      firstOrNull$result = null;
-    }
-     while (false);
-    if ((tmp$ = firstOrNull$result) != null) {
+    var tmp$_0, tmp$_1;
+    var tmp$_2;
+    if ((tmp$ = equals(input, CalculatorKeyboard$Companion_getInstance().ADD) || equals(input, CalculatorKeyboard$Companion_getInstance().SUB) || equals(input, CalculatorKeyboard$Companion_getInstance().RESET) ? input : null) != null) {
       this.action_0 = tmp$;
-      return this.calculate_61zpoe$(tmp$.title);
+      tmp$_2 = this.calculate_0(tmp$);
     }
      else
-      tmp$_1 = null;
+      tmp$_2 = null;
     var tmp$_3;
-    if ((tmp$_0 = tmp$_1) != null)
+    if ((tmp$_0 = tmp$_2) != null)
       tmp$_3 = tmp$_0;
     else {
       var tmp$_4;
       if (this.action_0 != null) {
         this.secondValue_0 += input;
-        return removePrefix(this.secondValue_0, '0');
+        tmp$_4 = this.secondValue_0;
       }
        else
         tmp$_4 = null;
       tmp$_3 = tmp$_4;
     }
-    if (tmp$_3 == null) {
+    var tmp$_5;
+    if ((tmp$_1 = tmp$_3) != null)
+      tmp$_5 = tmp$_1;
+    else {
       this.firstValue_0 += input;
-      return removePrefix(this.firstValue_0, '0');
+      tmp$_5 = this.firstValue_0;
     }
-  };
-  Processor.prototype.calculate_61zpoe$ = function (actionTitle) {
-    var tmp$;
-    println('calculating ' + this.firstValue_0 + ' ' + actionTitle + ' ' + this.secondValue_0);
-    if (equals(actionTitle, CalculatorAction$RESET_getInstance().title)) {
-      var $receiver = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
-      this.firstValue_0 = $receiver;
-      this.secondValue_0 = $receiver;
-      tmp$ = $receiver;
-    }
-     else if (equals(actionTitle, CalculatorAction$ADD_getInstance().title)) {
-      var $receiver_0 = (toInt(this.firstValue_0) + toInt(this.secondValue_0) | 0).toString();
-      this.firstValue_0 = $receiver_0;
-      this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
-      tmp$ = $receiver_0;
-    }
-     else if (equals(actionTitle, CalculatorAction$SUB_getInstance().title)) {
-      var $receiver_1 = (toInt(this.firstValue_0) - toInt(this.secondValue_0) | 0).toString();
-      this.firstValue_0 = $receiver_1;
-      this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
-      tmp$ = $receiver_1;
+    var out = tmp$_5;
+    var tmp$_6;
+    if (out.length > 1 && startsWith(out, CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT)) {
+      var startIndex = out.length;
+      tmp$_6 = out.substring(startIndex);
     }
      else
-      tmp$ = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+      tmp$_6 = out;
+    return tmp$_6;
+  };
+  Processor.prototype.calculate_0 = function (actionTitle) {
+    var tmp$;
+    println('calculating ' + this.firstValue_0 + ' ' + actionTitle + ' ' + this.secondValue_0);
+    switch (actionTitle) {
+      case 'AC':
+        var $receiver = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+        this.firstValue_0 = $receiver;
+        this.secondValue_0 = $receiver;
+        tmp$ = $receiver;
+        break;
+      case '+':
+        var $receiver_0 = (toInt(this.firstValue_0) + toInt(this.secondValue_0) | 0).toString();
+        this.firstValue_0 = $receiver_0;
+        this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+        tmp$ = $receiver_0;
+        break;
+      case '-':
+        var $receiver_1 = (toInt(this.firstValue_0) - toInt(this.secondValue_0) | 0).toString();
+        this.firstValue_0 = $receiver_1;
+        this.secondValue_0 = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+        tmp$ = $receiver_1;
+        break;
+      default:tmp$ = CalculatorKeyboard$Companion_getInstance().DEFAULT_INPUT;
+        break;
+    }
     return tmp$;
   };
   Processor.$metadata$ = {
@@ -418,16 +366,6 @@
     get: CalculatorKeyboard$Companion_getInstance
   });
   _.CalculatorKeyboard = CalculatorKeyboard;
-  Object.defineProperty(CalculatorAction, 'RESET', {
-    get: CalculatorAction$RESET_getInstance
-  });
-  Object.defineProperty(CalculatorAction, 'ADD', {
-    get: CalculatorAction$ADD_getInstance
-  });
-  Object.defineProperty(CalculatorAction, 'SUB', {
-    get: CalculatorAction$SUB_getInstance
-  });
-  _.CalculatorAction = CalculatorAction;
   _.main_kand9s$ = main;
   _.Instance = Instance;
   _.InstanceController = InstanceController;

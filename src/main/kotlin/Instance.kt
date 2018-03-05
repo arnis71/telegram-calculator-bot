@@ -2,9 +2,7 @@ import kotlin.js.Json
 import kotlin.js.json
 
 data class Instance(val user: User, val chat: Chat, var messageId: Int = -1) {
-    private val processor: Processor = Processor()
-
-    fun process(input: String) = processor.process(input)
+    val processor: Processor = Processor()
 }
 
 class InstanceController {
@@ -20,7 +18,7 @@ class InstanceController {
             json(
                 "chat_id" to it.chat.id,
                 "message_id" to it.messageId,
-                "text" to it.process(callbackQuery.data.removePrefix("data")),
+                "text" to it.processor.process(callbackQuery.data.removePrefix("data")),
                 "reply_markup" to CalculatorKeyboard(5,3).toJson()
             )
         }

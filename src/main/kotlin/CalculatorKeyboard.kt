@@ -14,7 +14,7 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
                 else
                     it.toString()
             }
-            .plus(sequenceOf(CalculatorAction.RESET.title, CalculatorAction.ADD.title, CalculatorAction.SUB.title))
+            .plus(sequenceOf(RESET, ADD, SUB))
             .map { json(
                 "text" to it,
                 "callback_data" to "data$it"
@@ -26,11 +26,8 @@ class CalculatorKeyboard(private val rows: Int, private val cols: Int) {
 
     companion object {
         const val DEFAULT_INPUT = "0"
+        const val RESET = "AC"
+        const val ADD = "+"
+        const val SUB = "-"
     }
-}
-
-enum class CalculatorAction(val title: String) {
-    RESET("AC"),
-    ADD("+"),
-    SUB("-");
 }
